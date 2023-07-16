@@ -1,0 +1,12 @@
+.pfx
+
+parent module
+environment variables in 
+variables includes in locals
+
+2 bits of the data
+how it works
+when use workspaces
+internals of workspace
+every terraform project have a workspace
+

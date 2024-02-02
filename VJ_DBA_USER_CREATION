@@ -1,0 +1,236 @@
+			DBA USER CREATION
+
+desc dba_users
+desc dba_temp_files
+desc dba_sys_privs
+desc DBA_ROLE_PRIVS
+desc role_sys_privs
+desc dba_tab_privs
+SELECT GRANTEE,OWNER,TABLE_NAME,GRANTOR,PRIVILEGE FROM DBA_TAB_PRIVS WHERE TABLE_NAME IN ('FND_REQUEST','FND_CONCURRENT','FND_PROFILE','FND_FILE') AND GRANTEE='KPMG';
+
+select * from dba_sys_privs where GRANTEE='RAVITEJA';
+
+set lines 199 pages 199
+col USERNAME for a20
+col NAME for a15
+col PASSWORD for a25
+col GRANTED_ROLE for a25
+col GRANTEE for a25
+col PROFILE for a30
+
+col OWNER for a25
+col TABLE_NAME for a25
+col GRANTOR for a30
+
+SELECT USERNAME,ACCOUNT_STATUS,DEFAULT_TABLESPACE,TEMPORARY_TABLESPACE,PROFILE FROM DBA_USERS  WHERE USERNAME ='ACOEPWXI';
+
+create user DBREAD identified by Bank_1234 DEFAULT TABLESPACE BOB_CUSTOM_TBLSPACE TEMPORARY TABLESPACE TEMP PROFILE APPLICATION_USER_PROFILE;
+
+grant connect to TBAADM;
+GRANT  RESOURCE TO TBAADM;
+grant create session to TBAADM;
+grant SELECT ANY TABLE  to TBAADM;
+grant CREATE TABLE  to TBAADM;
+grant UNLIMITED TABLESPACE  to TBAADM;
+
+alter user TBAADM quota unlimited on CONTROL;
+
+select GRANTEE,GRANTED_ROLE,ADMIN_OPTION,DEFAULT_ROLE  from DBA_ROLE_PRIVS where GRANTEE='TBAADM';
+
+select GRANTEE,GRANTED_ROLE from DBA_ROLE_PRIVS  where GRANTEE='TBAADM';
+
+select * from dba_profiles where profile='DEFAULT'; 
+
+select * from dba_sys_privs where GRANTEE='ACOEPWXI';
+
+select GRANTEE,PRIVILEGE from dba_sys_privs where GRANTEE='ACOEPWXI';
+
+select GRANTEE,OWNER,TABLE_NAME,GRANTOR,PRIVILEGE from dba_tab_privs where GRANTEE='TBAADM';
+
+select table_name from dict where table_name like '%ROLE%';
+
+select OWNER,TABLE_NAME,PRIVILEGE from ROLE_TAB_PRIVS where ROLE='OP_USER';
+
+example privilege === select GRANTEE,PRIVILEGE from dba_sys_privs where GRANTEE='DBA';
+==================
+
+alter user CTSSUPPORT identified by Welcome_001;
+
+alter user CUSTOM identified by Bank_1234;
+
+
+select distinct profile from dba_users;
+
+
+->give grant select on permission in schema:
+
+
+select 'grant select on '||owner||'.'||table_name||' to KKTP3;' from dba_tables where table_name='USER_CREDS_TBL';
+select 'grant select on '||owner||'.'||table_name||' to KKTP3;' from dba_tables where owner='KKTP2';
+select 'grant select on '||owner||'.'||table_name||' to SB107996;' from dba_tables where owner='AXIOMLITEUSR';
+ select 'grant select on '||OWNER||'.'||TABLE_NAME||' to READONLY;'  from dba_tables where OWNER='SB107996';
+
+
+=========================================== REVOKE ==========================================================
+
+PRIVILEGE
+=========
+revoke  ALTER TABLESPACE               from MIGNPA;
+revoke  CREATE VIEW                    from MIGNPA;
+revoke  CREATE DATABASE LINK           from MIGNPA;
+revoke  CREATE CLUSTER                 from MIGNPA;
+revoke  UNLIMITED TABLESPACE           from MIGNPA;
+revoke  CREATE PUBLIC SYNONYM          from MIGNPA;
+revoke  CREATE TABLE                   from MIGNPA;
+revoke  ALTER SESSION                  from MIGNPA;
+revoke  DROP PUBLIC SYNONYM            from MIGNPA;
+revoke  CREATE TABLESPACE              from MIGNPA;
+revoke  CREATE SEQUENCE                from MIGNPA;
+revoke  SELECT ANY SEQUENCE            from MIGNPA;
+revoke  CREATE SYNONYM                 from MIGNPA;
+revoke  CREATE SESSION                 from MIGNPA;
+
+role
+====
+revoke  RESOURCE                       from MIGNPA;
+revoke  DBA                            from MIGNPA;  
+
+drop
+====
+drop user MIGNPA;
+
+==============================================================================user metadata===========================================
+set long 99999999
+select dbms_metadata.get_ddl('USER','ORDDATA') from dual;
+
+
+   CREATE USER "ORDDATA" IDENTIFIED BY VALUES 'S:B2A4CF0752E0D67F8EC158EF52F8EBE
+7E4ADB4925469546EEBE03D20EE65;A93EC937FCD1DC2A'
+      DEFAULT TABLESPACE "USERS"
+      TEMPORARY TABLESPACE "TEMP_GROUP"
+      PASSWORD EXPIRE
+      ACCOUNT LOCK
+
+
+
+============================================================CREATE USER=====================================================================================
+
+create user IRAC identified by Bank_1234 default tablespace "USERS" temporary tablespace "TEMP_GROUP" profile APPLICATION_USER_PROFILE;  ---profile application 
+
+create user RAHUL identified by Bkc_1212 default TABLESPACE TOOLS TEMPORARY TABLESPACE TEMP2 PROFILE DEFAULT; ----default profile
+
+
+========================================================USER PROFILE SET=====================================================================================
+alter user IRAC profile APPLICATION_USER_PROFILE;
+
+
+
+18:24:24 BOBIND1 SQL>select dbms_metadata.get_ddl('PROFILE','APPLICATION_USER_PROFILE') from dual;
+
+DBMS_METADATA.GET_DDL('PROFILE','APPLICATION_USER_PROFILE')
+--------------------------------------------------------------------------------
+
+   CREATE PROFILE "APPLICATION_USER_PROFILE"
+    LIMIT
+         COMPOSITE_LIMIT DEFAULT
+         SESSIONS_PER_USER UNLIMITED
+         CPU_PER_SESSION DEFAULT
+         CPU_PER_CALL DEFAULT
+         LOGICAL_READS_PER_SESSION DEFAULT
+         LOGICAL_READS_PER_CALL DEFAULT
+         IDLE_TIME UNLIMITED
+         CONNECT_TIME DEFAULT
+         PRIVATE_SGA DEFAULT
+         FAILED_LOGIN_ATTEMPTS UNLIMITED
+         PASSWORD_LIFE_TIME UNLIMITED
+         PASSWORD_REUSE_TIME UNLIMITED
+         PASSWORD_REUSE_MAX UNLIMITED
+         PASSWORD_VERIFY_FUNCTION NULL
+         PASSWORD_LOCK_TIME UNLIMITED
+         PASSWORD_GRACE_TIME UNLIMITED
+
+
+Elapsed: 00:00:05.76
+
+
+
+---> alter user XMMUS PROFILE APPLICATION_USER_PROFILE;   /// permanent password no expire
+---> alter user CSOC password expire;
+
+
+User altered.
+
+SQL> conn XMMUS/Bank_1234
+ERROR:
+ORA-28001: the password has expired
+
+
+Changing password for XMMUS
+New password:
+Retype new password:
+Password unchanged
+Warning: You are no longer connected to ORACLE.
+
+
+
+ select GRANTEE,OWNER,TABLE_NAME,PRIVILEGE from dba_tab_privs where GRANTEE='READONLY'; 
+ 
+ 
+
+
+
+PASSWORD Backup
+
+select  name,password from user$ where name='&username';
+
+select NAME, USER#,PASSWORD from user$ where NAME='BOBGPS';
+
+15:00:32 SQL> select  name,password from user$ where name='&username';
+Enter value for username: RD063813
+old   1: select  name,password from user$ where name='&username'
+new   1: select  name,password from user$ where name='RD063813'
+
+NAME                           PASSWORD
+------------------------------ ----------
+RD063813                       C642D51462
+                               54888D
+
+
+Dear Team,
+
+Done the needful.
+
+Note:- kindly contact DB team for password.
+===================================================================================================
+
+KTP user Creation
+================
+SET TIME ON
+SET TIMING ON
+SET ECHO ON
+SET HEAD ON
+SET PAGES 50000
+SET LINES 200
+SET FEEDBACK ON
+SELECT 'ALTER '||DECODE(OBJECT_TYPE,'PACKAGE BODY','PACKAGE' ,OBJECT_TYPE) ||' '||OWNER||'.'||
+   LTRIM(RTRIM(OBJECT_NAME)) ||
+   DECODE(OBJECT_TYPE,'PACKAGE BODY',' COMPILE BODY',' COMPILE')||' ;'
+   FROM DBA_OBJECTS
+   WHERE STATUS = 'INVALID' AND OWNER='KKTP3';
+ 
+ 
+select OWNER,OBJECT_NAME,OBJECT_TYPE,STATUS from dba_objects where OWNER='KKTP3' and status='INVALID';
+ 
+select * from dba_role_privs where GRANTEE='KKTP2';
+ 
+select * from dba_sys_privs where grantee='KKTP2';
+ 
+select dbms_metadata.get_ddl('USER','KKTP3') from dual;
+ 
+select dbms_metadata.get_granted_ddl('ROLE_GRANT','KKTP2') from dual;
+
+
+ALTER USER ECECUSER PROFILE APPLICATION_USER_PROFILE;
+
+
+ALTER USER CMS_BOB_DOM quota unlimited on CMS_PRD_IDX;

@@ -1,0 +1,80 @@
+
+18:36:13 BOBIND1 SQL>select * from dba_db_links where DB_LINK='FINTOSWIFT';
+
+OWNER    DB_LINK                                       USERNAME                                      HOST                                          CREATED
+-------- --------------------------------------------- --------------------------------------------- --------------------------------------------- -------------------
+CUSTOM   FINTOSWIFT                                    XMMCR_IN                                      XMMIN                                         16-07-2018 16:37:48
+
+Elapsed: 00:00:00.01
+18:36:57 BOBIND1 SQL>set long 99999999
+
+18:37:23 BOBIND1 SQL>select dbms_metadata.get_ddl('DB_LINK','FINTOSWIFT','CUSTOM') from dual
+18:37:29   2  /
+
+DBMS_METADATA.GET_DDL('DB_LINK','FINTOSWIFT','CUSTOM')
+--------------------------------------------------------------------------------
+
+  CREATE DATABASE LINK "FINTOSWIFT"
+   CONNECT TO "XMMCR_IN" IDENTIFIED BY VALUES ':1'
+   USING 'XMMIN'
+
+
+18:37:44 BOBIND1 SQL>create or replace procedure CUSTOM.droplink
+is
+begin
+execute immediate 'drop database link FINTOSWIFT';
+end;
+/ 18:37:49   2  18:37:49   3  18:37:49   4  18:37:49   5  18:37:49   6
+
+Procedure created.
+
+
+18:37:52 BOBIND1 SQL>execute CUSTOM.droplink;
+
+PL/SQL procedure successfully completed.
+
+
+18:38:25 BOBIND1 SQL>select * from dba_db_links where DB_LINK='FINTOSWIFT';
+
+
+no rows selected
+
+Elapsed: 00:00:00.01
+18:38:31 BOBIND1 SQL>drop procedure CUSTOM.droplink;
+
+Procedure dropped.
+
+Elapsed: 00:00:00.22
+18:39:45 BOBIND1 SQL>select * from dba_db_links where DB_LINK='FINTOSWIFT';
+
+no rows selected
+
+Elapsed: 00:00:00.01
+18:40:00 BOBIND1 SQL>create or replace procedure TBAGEN.createlink
+is
+begin
+execute immediate 'create database link FINTOSWIFT connect to XMMCR_IN identified by Bank_1234 using ''XMMIN''';
+end;
+/18:40:31   2  18:40:31   3  18:40:31   4  18:40:31   5  18:40:31   6
+
+Procedure created.
+
+
+Elapsed: 00:00:00.08
+18:40:34 BOBIND1 SQL>execute TBAGEN.createlink
+
+PL/SQL procedure successfully completed.
+
+
+Elapsed: 00:00:00.03
+18:40:48 BOBIND1 SQL>select * from dba_db_links where DB_LINK='FINTOSWIFT';
+
+OWNER    DB_LINK                                       USERNAME                                      HOST                                          CREATED
+-------- --------------------------------------------- --------------------------------------------- --------------------------------------------- -------------------
+TBAGEN   FINTOSWIFT                                    XMMCR_IN                                      XMMIN                                         19-07-2018 18:40:46
+
+
+Elapsed: 00:00:00.00
+18:41:12 BOBIND1 SQL>drop procedure TBAGEN.createlink;
+
+Procedure dropped.

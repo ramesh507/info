@@ -1,0 +1,385 @@
+login: orarac
+orarac@172.17.11.76's password:
+Last unsuccessful login: Fri Jul 26 04:05:09 IST 2019 on ssh from bbh2pcsec113.ban                                                                                     kofbaroda.co.in
+Last login: Fri Jul 26 16:30:52 IST 2019 on /dev/pts/0 from bdc2pc045.bankofbaroda                                                                                     .co.in
+*******************************************************************************
+*                                                                             *
+*                                                                             *
+*  Welcome to AIX Version 7.1!                                                *
+*                                                                             *
+*                                                                             *
+*  Please see the README file in /usr/lpp/bos for information pertinent to    *
+*  this release of the AIX Operating System.                                  *
+*                                                                             *
+*                                                                             *
+*******************************************************************************
+[YOU HAVE NEW MAIL]
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac> s
+
+SQL*Plus: Release 11.2.0.4.0 Production on Fri Jul 26 17:03:19 2019
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters and Automatic Storage Management options
+
+
+
+
+
+
+Session altered.
+
+Elapsed: 00:00:00.00
+17:03:19 SYS@mapsdb1>17:03:19 SYS@mapsdb1>
+17:03:19 SYS@mapsdb1>
+17:03:19 SYS@mapsdb1>
+17:03:19 SYS@mapsdb1>@dg
+
+
+
+GROUP_NUMBER|NAME                          |STATE      |  TOTAL_GB|   FREE_GB|HOT_USED_GB|COLD_USED_GB|REQUIRED_MIRROR_FREE_GB|USABLE_FILE_GB
+------------|------------------------------|-----------|----------|----------|-----------|------------|-----------------------|--------------
+           1|MAPSARCH                      |CONNECTED  |       200|180.108398|          0|  19.8916016|                      0|    180.108398
+           2|MAPSDATA                      |CONNECTED  |       900|116.280273|          0|  783.719727|                      0|    116.280273
+           3|MAPSINDX                      |CONNECTED  |        80|     2.125|          0|      77.875|                      0|         2.125
+           4|MAPSREDO1                     |CONNECTED  |         6|.240234375|          0|  5.75976563|                      0|    .240234375
+           5|MAPSREDO2                     |CONNECTED  |         6|.240234375|          0|  5.75976563|                      0|    .240234375
+           6|OCRVOTE                       |MOUNTED    |        15|13.8398438|          0|  1.16015625|                      0|    4.61328125
+
+6 rows selected.
+
+
+17:03:57 SYS@mapsdb1>select name,bytes/1024/1024/1024 from v$datafile where name like '%MAPSINDX%';
+
+NAME                                                                       |BYTES/1024/1024/1024
+---------------------------------------------------------------------------|--------------------
++MAPSINDX/mapsdb/datafile/mrchidx.256.936363597                            |          .129882813
++MAPSINDX/mapsdb/datafile/mrchprt3.257.959605887                           |           2.1484375
++MAPSINDX/mapsdb/datafile/mrchprt2.258.959605907                           |           1.7578125
++MAPSINDX/mapsdb/datafile/mrchprt1.259.959605915                           |           1.7578125
++MAPSINDX/mapsdb/datafile/mrchprt4.260.959605933                           |           1.7578125
++MAPSINDX/mapsdb/datafile/mrchprt5.261.959605945                           |           2.1484375
++MAPSINDX/mapsdb/datafile/mrchprt6.262.959605951                           |           2.1484375
++MAPSINDX/mapsdb/datafile/mrchprt7.263.959605961                           |           2.1484375
++MAPSINDX/mapsdb/datafile/mrchprt8.264.959605971                           |           3.3203125
++MAPSINDX/mapsdb/datafile/mrchdata.265.959605979                           |                   1
++MAPSINDX/mapsdb/datafile/system.266.959605989                             |          .166015625
++MAPSINDX/mapsdb/datafile/sysaux.267.959605997                             |                   4
++MAPSINDX/mapsdb/datafile/users.268.959606005                              |                  15
++MAPSINDX/mapsdb/datafile/audit_tbs.269.959606011                          |          .009765625
++MAPSINDX/mapsdb/datafile/rmnctlg.270.959606017                            |          .146484375
++MAPSINDX/mapsdb/datafile/users.271.965155963                              |                  15
++MAPSINDX/mapsdb/datafile/users.272.976730697                              |                  17
++MAPSINDX/mapsdb/datafile/undotbs2.273.977507535                           |                   3
++MAPSINDX/mapsdb/datafile/users.274.997953199                              |                   5
++MAPSINDX/mapsdb/datafile/users.275.1009627977                             |           .09765625
+
+20 rows selected.
+
+Elapsed: 00:00:00.50
+17:04:29 SYS@mapsdb1>l
+  1* select name,bytes/1024/1024/1024 from v$datafile where name like '%MAPSINDX%'
+17:04:31 SYS@mapsdb1>select file#,name,bytes/1024/1024/1024 from v$datafile where name like '%MAPSINDX%'
+17:04:43   2  /
+
+     FILE#|NAME                                                                       |BYTES/1024/1024/1024
+----------|---------------------------------------------------------------------------|--------------------
+        15|+MAPSINDX/mapsdb/datafile/mrchidx.256.936363597                            |          .129882813
+        53|+MAPSINDX/mapsdb/datafile/mrchprt3.257.959605887                           |           2.1484375
+        54|+MAPSINDX/mapsdb/datafile/mrchprt2.258.959605907                           |           1.7578125
+        55|+MAPSINDX/mapsdb/datafile/mrchprt1.259.959605915                           |           1.7578125
+        56|+MAPSINDX/mapsdb/datafile/mrchprt4.260.959605933                           |           1.7578125
+        57|+MAPSINDX/mapsdb/datafile/mrchprt5.261.959605945                           |           2.1484375
+        58|+MAPSINDX/mapsdb/datafile/mrchprt6.262.959605951                           |           2.1484375
+        59|+MAPSINDX/mapsdb/datafile/mrchprt7.263.959605961                           |           2.1484375
+        60|+MAPSINDX/mapsdb/datafile/mrchprt8.264.959605971                           |           3.3203125
+        61|+MAPSINDX/mapsdb/datafile/mrchdata.265.959605979                           |                   1
+        62|+MAPSINDX/mapsdb/datafile/system.266.959605989                             |          .166015625
+        63|+MAPSINDX/mapsdb/datafile/sysaux.267.959605997                             |                   4
+        64|+MAPSINDX/mapsdb/datafile/users.268.959606005                              |                  15
+        65|+MAPSINDX/mapsdb/datafile/audit_tbs.269.959606011                          |          .009765625
+        66|+MAPSINDX/mapsdb/datafile/rmnctlg.270.959606017                            |          .146484375
+        67|+MAPSINDX/mapsdb/datafile/users.271.965155963                              |                  15
+        81|+MAPSINDX/mapsdb/datafile/users.272.976730697                              |                  17
+        82|+MAPSINDX/mapsdb/datafile/undotbs2.273.977507535                           |                   3
+       100|+MAPSINDX/mapsdb/datafile/users.274.997953199                              |                   5
+       107|+MAPSINDX/mapsdb/datafile/users.275.1009627977                             |           .09765625
+
+20 rows selected.
+
+Elapsed: 00:00:00.55
+17:04:45 SYS@mapsdb1>select distinct process from v$managed_standby;
+
+PROCESS
+---------
+ARCH
+RFS
+
+17:05:35 SYS@mapsdb1>@dg
+
+GROUP_NUMBER|NAME                                                                       |STATE      |  TOTAL_GB|   FREE_GB|HOT_USED_GB|COLD_USED_GB|REQUIRED_MIRROR_FREE_GB|USABLE_FILE_GB
+------------|---------------------------------------------------------------------------|-----------|----------|----------|-----------|------------|-----------------------|--------------
+           1|MAPSARCH                                                                   |CONNECTED  |       200|180.105469|          0|  19.8945313|                      0|    180.105469
+           2|MAPSDATA                                                                   |CONNECTED  |       900|116.280273|          0|  783.719727|                      0|    116.280273
+           3|MAPSINDX                                                                   |CONNECTED  |        80|     2.125|          0|      77.875|                      0|         2.125
+           4|MAPSREDO1                                                                  |CONNECTED  |         6|.240234375|          0|  5.75976563|                      0|    .240234375
+           5|MAPSREDO2                                                                  |CONNECTED  |         6|.240234375|          0|  5.75976563|                      0|    .240234375
+           6|OCRVOTE                                                                    |MOUNTED    |        15|13.8398438|          0|  1.16015625|                      0|    4.61328125
+
+6 rows selected.
+
+17:07:50 SYS@mapsdb1>select file#,name,bytes/1024/1024/1024 from v$datafile where file#=81;
+
+     FILE#|NAME                               |BYTES/1024/1024/1024
+----------|-----------------------------------|--------------------
+        81|+MAPSINDX/mapsdb/datafile/users.272|                  17
+          |.976730697                         |
+
+
+Elapsed: 00:00:00.02
+17:08:45 SYS@mapsdb1>
+17:08:45 SYS@mapsdb1>exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters and Automatic Storage Management options
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac> rman target /
+
+Recovery Manager: Release 11.2.0.4.0 - Production on Fri Jul 26 17:08:49 2019
+
+Copyright (c) 1982, 2011, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: MAPSDB (DBID=107571481, not open)
+
+RMAN>
+
+RMAN>
+
+RMAN> backup as copy datafile 81 format '+MAPSDATA';
+
+Starting backup at 26-JUL-19
+using target database control file instead of recovery catalog
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=5019 instance=mapsdb1 device type=DISK
+channel ORA_DISK_1: starting datafile copy
+input datafile file number=00081 name=+MAPSINDX/mapsdb/datafile/users.272.976730697
+output file name=+MAPSDATA/mapsdb/datafile/users.838.1014656945 tag=TAG20190726T170905 RECID=3 STAMP=1014656986
+channel ORA_DISK_1: datafile copy complete, elapsed time: 00:00:45
+Finished backup at 26-JUL-19
+
+Starting Control File and SPFILE Autobackup at 26-JUL-19
+piece handle=+MAPSARCH/mapsdb/autobackup/2019_07_26/s_1014623982.4347.1014656991 comment=NONE
+Finished Control File and SPFILE Autobackup at 26-JUL-19
+
+RMAN>
+
+RMAN>
+
+RMAN> switch datafile 81 to copy;
+
+datafile 81 switched to datafile copy "+MAPSDATA/mapsdb/datafile/users.838.1014656945"
+
+RMAN>
+
+RMAN>
+
+RMAN> exit
+
+
+Recovery Manager complete.
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac> s
+
+SQL*Plus: Release 11.2.0.4.0 Production on Fri Jul 26 17:10:23 2019
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters and Automatic Storage Management options
+
+
+
+
+
+
+Session altered.
+
+Elapsed: 00:00:00.00
+17:10:23 SYS@mapsdb1>
+17:10:24 SYS@mapsdb1>
+17:10:24 SYS@mapsdb1>
+17:10:24 SYS@mapsdb1>select file#,name,bytes/1024/1024/1024 from v$datafile where file#=81;
+
+     FILE#
+----------
+NAME
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BYTES/1024/1024/1024
+--------------------
+        81
++MAPSDATA/mapsdb/datafile/users.838.1014656945
+                  17
+
+
+Elapsed: 00:00:00.01
+17:10:30 SYS@mapsdb1>
+17:10:32 SYS@mapsdb1>
+17:10:32 SYS@mapsdb1>
+17:10:47 SYS@mapsdb1>
+17:10:47 SYS@mapsdb1>
+17:10:48 SYS@mapsdb1>@d
+
+Database altered.
+
+Elapsed: 00:00:08.11
+17:10:56 SYS@mapsdb1>
+17:11:39 SYS@mapsdb1>
+17:11:39 SYS@mapsdb1>
+17:11:39 SYS@mapsdb1>
+17:11:40 SYS@mapsdb1>select file#,name,bytes/1024/1024/1024 from v$datafile where file#=107;
+
+     FILE#
+----------
+NAME
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BYTES/1024/1024/1024
+--------------------
+       107
++MAPSINDX/mapsdb/datafile/users.275.1009627977
+           .09765625
+
+
+Elapsed: 00:00:00.01
+17:11:50 SYS@mapsdb1>
+17:11:51 SYS@mapsdb1>select file#,name,bytes/1024/1024/1024 from v$datafile where file#=81;
+
+     FILE#
+----------
+NAME
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BYTES/1024/1024/1024
+--------------------
+        81
++MAPSDATA/mapsdb/datafile/users.838.1014656945
+                  17
+
+
+Elapsed: 00:00:00.01
+17:12:11 SYS@mapsdb1>exit
+Disconnected from Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters and Automatic Storage Management options
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac> rman target /
+
+Recovery Manager: Release 11.2.0.4.0 - Production on Fri Jul 26 17:12:46 2019
+
+Copyright (c) 1982, 2011, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: MAPSDB (DBID=107571481, not open)
+
+RMAN>
+
+RMAN>
+
+RMAN> backup as copy datafile 107 format '+MAPSDATA';
+
+Starting backup at 26-JUL-19
+using target database control file instead of recovery catalog
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=5019 instance=mapsdb1 device type=DISK
+channel ORA_DISK_1: starting datafile copy
+input datafile file number=00107 name=+MAPSINDX/mapsdb/datafile/users.275.1009627977
+output file name=+MAPSDATA/mapsdb/datafile/users.806.1014657169 tag=TAG20190726T171249 RECID=5 STAMP=1014657170
+channel ORA_DISK_1: datafile copy complete, elapsed time: 00:00:01
+Finished backup at 26-JUL-19
+
+Starting Control File and SPFILE Autobackup at 26-JUL-19
+piece handle=+MAPSARCH/mapsdb/autobackup/2019_07_26/s_1014623982.4063.1014657171 comment=NONE
+Finished Control File and SPFILE Autobackup at 26-JUL-19
+
+
+RMAN>
+RMAN> switch datafile 107 to copy;
+
+datafile 107 switched to datafile copy "+MAPSDATA/mapsdb/datafile/users.806.1014657169"
+
+RMAN> exit
+
+
+Recovery Manager complete.
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac>
+ipgmdb110:/home/orarac> s
+
+SQL*Plus: Release 11.2.0.4.0 Production on Fri Jul 26 17:13:13 2019
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters and Automatic Storage Management options
+
+
+
+
+
+
+Session altered.
+
+Elapsed: 00:00:00.00
+17:13:13 SYS@mapsdb1>
+17:13:14 SYS@mapsdb1>
+17:13:14 SYS@mapsdb1>
+17:13:14 SYS@mapsdb1>
+17:13:14 SYS@mapsdb1>
+17:13:14 SYS@mapsdb1>
+17:13:15 SYS@mapsdb1>select file#,name,bytes/1024/1024/1024 from v$datafile where file#=107;
+
+     FILE#
+----------
+NAME
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+BYTES/1024/1024/1024
+--------------------
+       107
++MAPSDATA/mapsdb/datafile/users.806.1014657169
+           .09765625
+
+
+Elapsed: 00:00:00.01
+17:13:23 SYS@mapsdb1>
+17:13:23 SYS@mapsdb1>
+17:13:23 SYS@mapsdb1>@d
+
+Database altered.
+
+Elapsed: 00:00:08.06
+17:13:35 SYS@mapsdb1>
+17:14:26 SYS@mapsdb1>
+17:14:26 SYS@mapsdb1>
+17:14:26 SYS@mapsdb1>
+
+
+
+

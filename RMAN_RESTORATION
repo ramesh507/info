@@ -1,0 +1,56 @@
+RESTORE CONTROLFILE  FROM '/tmp/control_16-01-17_23_24.ctl';
+
+run
+{
+catalog start with '/ctsdlarch/CTSDELHI/RMAN/RMAN_BKP/02052016/'
+}
+
+run {
+allocate channel d1 type disk;
+allocate channel d2 type disk;
+allocate channel d3 type disk;
+allocate channel d4 type disk;
+allocate channel d5 type disk;
+set newname for datafile 1 to '/ctsdldata2/CTSNORTH/DATAFILE/system01.dbf';
+set newname for datafile 2 to '/ctsdldata2/CTSNORTH/DATAFILE/sysaux01.dbf';
+set newname for datafile 3 to '/ctsdldata2/CTSNORTH/DATAFILE/undotbs01.dbf';
+set newname for datafile 4 to '/ctsdldata2/CTSNORTH/DATAFILE/users01.dbf';
+set newname for datafile 5 to '/ctsdldata1/CTSNORTH/DATAFILE/archcts.dbf';
+set newname for datafile 6 to '/ctsdldata2/CTSNORTH/DATAFILE/trancts.dbf';
+set newname for datafile 7 to '/ctsdldata2/CTSNORTH/DATAFILE/tools_tblspace_1.dbf';
+set newname for datafile 8 to '/ctsdldata2/CTSNORTH/DATAFILE/tools_tblspace_2.dbf';
+set newname for datafile 9 to '/ctsdldata2/CTSNORTH/DATAFILE/tools_tblspace_3.dbf';
+set newname for datafile 10 to '/ctsdldata2/CTSNORTH/DATAFILE/tools_tblspace_4.dbf';
+set newname for datafile 11 to '/ctsdldata2/CTSNORTH/DATAFILE/tools_tblspace_5.dbf';
+set newname for datafile 12 to '/ctsdldata2/CTSNORTH/DATAFILE/tools_tblspace_6.dbf';
+set newname for datafile 14 to '/ctsdldata1/CTSNORTH/DATAFILE/system02.dbf';
+set newname for datafile 15 to '/ctsdldata1/CTSNORTH/DATAFILE/sysaux02.dbf';
+restore datafile 1,2,3;
+restore datafile 4,5,6;
+restore datafile 7,8,9;
+restore datafile 10,11,12;
+restore datafile 14,15;
+}
+
+RMAN>switch database to copy;
+
+
+NAME                                                    FILE#
+-------------------------------------------------- ----------
+/ctsdldata02/CTSNORTH/data/CTSNORTH/system01.dbf            1
+/ctsdldata02/CTSNORTH/data/CTSNORTH/sysaux01.dbf            2
+/ctsdldata02/CTSNORTH/data/CTSNORTH/undotbs01.dbf           3
+/ctsdldata02/CTSNORTH/data/CTSNORTH/users01.dbf             4
+/ctsdldata01/CTSNORTH/archdata/archcts.dbf                  5
+/ctsdldata02/CTSNORTH/data/trancts.dbf                      6
+/ctsdldata02/CTSNORTH/data/tools_tblspace_1.dbf             7
+/ctsdldata02/CTSNORTH/data/tools_tblspace_2.dbf             8
+/ctsdldata02/CTSNORTH/data/tools_tblspace_3.dbf             9
+/ctsdldata02/CTSNORTH/data/tools_tblspace_4.dbf            10
+/ctsdldata02/CTSNORTH/data/tools_tblspace_5.dbf            11
+/ctsdldata02/CTSNORTH/data/tools_tblspace_6.dbf            12
+/ctsdldata01/CTSNORTH/archdata/system02.dbf                14
+/ctsdldata01/CTSNORTH/archdata/sysaux02.dbf                15
+
+
+nohup rman target / cmdfile=restore_kk.sql log=restore_kk_25012017_1.log &

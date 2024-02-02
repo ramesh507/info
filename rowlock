@@ -1,0 +1,482 @@
+login: orarac
+orarac@172.16.19.181's password:
+===============================================================
+--------         trying to restart the session         --------
+===============================================================
+login: oracle
+oracle@172.16.19.181's password:
+Access denied
+oracle@172.16.19.181's password:
+Last failed login: Tue Mar 23 15:49:25 IST 2021 from bbh2pcsec113.bankofbaroda.co.in on ssh:notty
+There was 1 failed login attempt since the last successful login.
+Last login: Tue Mar 23 15:45:06 2021
+[oracle@ntrnfdb001 ~]$
+[oracle@ntrnfdb001 ~]$
+[oracle@ntrnfdb001 ~]$ s
+
+SQL*Plus: Release 12.2.0.1.0 Production on Tue Mar 23 15:49:29 2021
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+
+
+Session altered.
+
+Elapsed: 00:00:00.00
+
+INSTANCE_NUMBER INSTANCE_NAME    HOST_NAME  VERSION           STARTUP_TIME        PAR STATUS       ARCHIVE DATABASE_STATUS   ACTIVE_ST INSTANCE_MO LO                                           GINS
+--------------- ---------------- ---------- ----------------- ------------------- --- ------------ ------- ----------------- --------- ----------- --                                           --------
+              1 BOBTFDB1         ntrnfdb001 12.2.0.1.0        23-03-2021 04:00:05 YES OPEN         STARTED ACTIVE            NORMAL    REGULAR     AL                                           LOWED
+                                 .bankofbar
+                                 oda.co.in
+
+              2 BOBTFDB2         ntrnfdb002 12.2.0.1.0        23-03-2021 04:00:04 YES OPEN         STARTED ACTIVE            NORMAL    REGULAR     AL                                           LOWED
+                                 .bankofbar
+                                 oda.co.in
+
+
+Elapsed: 00:00:00.04
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+background_core_dump                 string      partial
+background_dump_dest                 string      /ora12c/app/product/12.2.0/dbh
+                                                 ome_1/rdbms/log
+core_dump_dest                       string      /ora12c/app/diag/rdbms/bobtfdb
+                                                 /BOBTFDB1/cdump
+max_dump_file_size                   string      unlimited
+shadow_core_dump                     string      partial
+user_dump_dest                       string      /ora12c/app/product/12.2.0/dbh
+                                                 ome_1/rdbms/log
+Alert File Location : /ora12c/app/diag/rdbms/bobtfdb/BOBTFDB1/trace
+
+15:49:29 BOBTFDB1 SQL>@role
+
+NAME                           DB_UNIQUE_NAME                 OPEN_MODE            DATABASE_ROLE    SWITCHOVER_STATUS
+------------------------------ ------------------------------ -------------------- ---------------- --------------------
+BOBTFDB                        BOBTFDB                        READ WRITE           PRIMARY          TO STANDBY
+BOBTFDB                        BOBTFDB                        READ WRITE           PRIMARY          TO STANDBY
+
+Elapsed: 00:00:00.05
+15:49:35 BOBTFDB1 SQL>@sync_rac
+
+   INST_ID HOSTNAME        DATABASE  LOG_ARCHIVED LOG_APPLIED    LOG_GAP APPLIED_TIME
+---------- --------------- --------- ------------ ----------- ---------- ---------------
+         1 NTRNFDB001      BOBTFDB         299006      299006          0 23-MAR/15:46
+         2 NTRNFDB002      BOBTFDB         297670      297669          1 23-MAR/15:46
+
+Elapsed: 00:00:00.81
+15:49:42 BOBTFDB1 SQL>
+15:49:43 BOBTFDB1 SQL>
+15:49:43 BOBTFDB1 SQL>
+15:49:43 BOBTFDB1 SQL>
+15:49:43 BOBTFDB1 SQL>@tab
+
+Tablespace Name                Total Space Used Space Free Space     % Free
+------------------------------ ----------- ---------- ---------- ----------
+TIZONE                             2400296 2354008.36   46287.64 1.92841383
+THEMEBRIDGE                         829500  802503.45   26996.55 3.25455696
+SYSAUX                              215050  204503.94   10546.06 4.90400372
+USERS                               368640  348594.81   20045.19 5.43760579
+FBCC                                 46080   39443.56    6636.44 14.4019965
+TF_PROD_RO                            5120    3000.37    2119.63 41.3990234
+SYSTEM                                8192    3079.69    5112.31 62.4061279
+UNDOTBS1                             51200   14013.44   37186.56      72.63
+UNDOTBS2                             51200    9181.06   42018.94 82.0682422
+TIGLOBAL                              2048     104.81    1943.19 94.8823242
+DBMAINTENANCE                         2048        8.2     2039.8 99.5996094
+
+11 rows selected.
+
+Elapsed: 00:00:00.43
+15:49:46 BOBTFDB1 SQL>archive log list
+Database log mode              Archive Mode
+Automatic archival             Enabled
+Archive destination            +NTRNFDB_ARCH
+Oldest online log sequence     299004
+Next log sequence to archive   299007
+Current log sequence           299007
+15:49:55 BOBTFDB1 SQL>@dg
+
+GROUP_NUMBER NAME                           STATE         TOTAL_GB    FREE_GB HOT_USED_GB COLD_USED_GB REQUIRED_MIRROR_FREE_GB USABLE_FILE_GB
+------------ ------------------------------ ----------- ---------- ---------- ----------- ------------ ----------------------- --------------
+           1 NTRNFDB_ARCH                   CONNECTED          200 117.886719           0   82.1132813                       0     117.886719
+           2 NTRNFDB_DATA1                  CONNECTED         2100 10.6914063           0   2089.30859                       0     10.6914063
+           3 NTRNFDB_DATA2                  CONNECTED         2100 210.417969           0   1889.58203                       0     210.417969
+           4 NTRNFDB_REDO1                  CONNECTED           20 16.5859375           0    3.4140625                       0     16.5859375
+           5 NTRNFDB_REDO2                  CONNECTED           20 16.5859375           0    3.4140625                       0     16.5859375
+           6 OCRVD                          MOUNTED             40  .02734375           0   39.9726563                       0      .02734375
+
+6 rows selected.
+
+Elapsed: 00:00:00.12
+15:49:57 BOBTFDB1 SQL>@lc
+
+Session altered.
+
+Elapsed: 00:00:00.00
+
+SPID   SQL_ID        SQL_COST  SQL_CNT APP_ID USERNAME LOGONDATE       EVENT                          OSUSER   MODULE                         MACHINE                                            WAIT_MINS
+------ ------------- -------- -------- ------ -------- --------------- ------------------------------ -------- ------------------------------ -------                                           --- ---------
+23965  fbz689artu7h9        1        1 23964  SYS      23-03 15:49:29  PGA memory operation           oracle   sqlplus@ntrnfdb001.bankofbarod ntrnfdb                                           001      0
+                                                                                                                                              .bankof                                           bar
+                                                                                                                                              oda.co.                                           in
+
+30108  c35ukg5yuqwxz      144        4 1234   TFBOTOOL 23-03 07:17:06                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+30204  c35ukg5yuqwxz      144        4 1234   TFBOTOOL 23-03 07:17:09                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+25832  0mxpd3qs6yphr   537210        1 1234   TIZONE   23-03 15:50:22                                 root     JDBC Thin Client               NTRNFAP                                           001      0
+30113  9zbaz04tbhqm8                 1 1234   TFBOTOOL 23-03 07:17:06                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+30189  g6x9pkm21tbf9        5        1 1234   TFBOTOOL 23-03 07:17:09  SQL*Net message to client      oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+30252  c35ukg5yuqwxz      144        4 1234   TFBOTOOL 23-03 07:17:10                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+30132  3d430y9tu0hct      186        1 1234   TFBOTOOL 23-03 07:17:07                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+25799  9gjwgsvy71vsq   537210        1 1234   TIZONE   23-03 15:50:21                                 root     JDBC Thin Client               NTRNFAP                                           002      0
+                                                                       ------------------------------
+30176  4agxrt981d39m      258        2 1234   TFBOTOOL 23-03 07:17:08  buffer busy waits              oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+14337  6sxgv1d4zddg4  1076222        1 1234   THEMEBRI 23-03 07:29:03  direct path read               root     JDBC Thin Client               NTRNFAP                                           002      0
+                                              DGE
+
+                                                                       ------------------------------
+25788  9x85f2qbaw5f7        1        4 1234   TIZONE   23-03 15:50:19  enq: TX - row lock contention  root     JDBC Thin Client               NTRNFAP                                           002      0
+19654  c5pvrmt62pknt        1        2 1234   TIGLOBAL 23-03 07:30:24                                 root     JDBC Thin Client               NTRNFAP                                           002      0
+25617  9x85f2qbaw5f7        1        4 1234   TIZONE   23-03 15:50:14                                 root     JDBC Thin Client               NTRNFAP                                           002      0
+25876  9x85f2qbaw5f7        1        4 1234   TIZONE   23-03 15:50:23                                 root     JDBC Thin Client               NTRNFAP                                           002      0
+25857  9x85f2qbaw5f7        1        4 1234   TIZONE   23-03 15:50:22                                 root     JDBC Thin Client               NTRNFAP                                           002      0
+                                                                       ------------------------------
+30272  c35ukg5yuqwxz      144        4 1234   TFBOTOOL 23-03 07:17:11  gc cr block 2-way              oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+30254  97mvxgdsy3sck       64        1 1234   TFBOTOOL 23-03 07:17:10  latch: cache buffers chains    oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+30248  4agxrt981d39m      258        2 1234   TFBOTOOL 23-03 07:17:10                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+30283  1bz2dgkvcag8w      342        1 1234   TFBOTOOL 23-03 07:17:12                                 oracle   JDBC Thin Client               NTRNFZA                                           P00      0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+19619  c5pvrmt62pknt        1        2 1234   TIGLOBAL 23-03 07:30:24  transaction                    root     JDBC Thin Client               NTRNFAP                                           002      0
+                                                                       ------------------------------
+
+21 rows selected.
+
+Elapsed: 00:00:00.17
+15:50:25 BOBTFDB1 SQL>/
+
+SPID   SQL_ID        SQL_COST  SQL_CNT APP_ID USERNAME LOGONDATE       EVENT                          OSUSER   MODULE                         MACHINE    WAIT_MINS
+------ ------------- -------- -------- ------ -------- --------------- ------------------------------ -------- ------------------------------ ---------- ---------
+23965  fbz689artu7h9        1        1 23964  SYS      23-03 15:49:29  PGA memory operation           oracle   sqlplus@ntrnfdb001.bankofbarod ntrnfdb001         0
+                                                                                                                                              .bankofbar
+                                                                                                                                              oda.co.in
+
+30108  c35ukg5yuqwxz      144        3 1234   TFBOTOOL 23-03 07:17:06                                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+30252  c35ukg5yuqwxz      144        3 1234   TFBOTOOL 23-03 07:17:10                                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+26042  b83h7867v9n0q                 1 1234   TIZONE   23-03 15:50:27                                 root     JDBC Thin Client               NTRNFAP002         0
+25872  cz6yrusnv6h6m                 1 1234   TIZONE   23-03 15:50:23                                 root     JDBC Thin Client               NTRNFAP002         0
+                                                                       ------------------------------
+30136  33hr3n63r6kg6      186        1 1234   TFBOTOOL 23-03 07:17:07  SQL*Net message to client      oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+30132  fbx6u4r3x13vk      254        1 1234   TFBOTOOL 23-03 07:17:07                                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+30204  4xqqfj3mh0pkw     2271        1 1234   TFBOTOOL 23-03 07:17:09  acknowledge over PGA limit     oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+14337  6sxgv1d4zddg4  1076222        1 1234   THEMEBRI 23-03 07:29:03  direct path read               root     JDBC Thin Client               NTRNFAP002         0
+                                              DGE
+
+                                                                       ------------------------------
+19705  c5pvrmt62pknt        1        2 1234   TIGLOBAL 23-03 07:30:25  enq: TX - row lock contention  root     JDBC Thin Client               NTRNFAP002         0
+19598  c5pvrmt62pknt        1        2 1234   TIGLOBAL 23-03 07:30:23                                 root     JDBC Thin Client               NTRNFAP002         0
+                                                                       ------------------------------
+30176  97mvxgdsy3sck       64        2 1234   TFBOTOOL 23-03 07:17:08  gc cr block 2-way              oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+25987  0m70vxxw5prt9   537210        1 1234   TIZONE   23-03 15:50:26                                 root     JDBC Thin Client               NTRNFAP001         0
+                                                                       ------------------------------
+30254  97mvxgdsy3sck       64        2 1234   TFBOTOOL 23-03 07:17:10  gc current block 2-way         oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+30106  2ct2kww7un7qj       96        1 1234   TFBOTOOL 23-03 07:17:06  latch: cache buffers chains    oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+30272  c35ukg5yuqwxz      144        3 1234   TFBOTOOL 23-03 07:17:11                                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+30283  cpdc462ns6uz6      186        1 1234   TFBOTOOL 23-03 07:17:12                                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+30281  5k47m4v2zc66k      186        1 1234   TFBOTOOL 23-03 07:17:12                                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+30113  gxjkqh5qqthp2                 1 1234   TFBOTOOL 23-03 07:17:06  row cache read                 oracle   JDBC Thin Client               NTRNFZAP00         0
+                                                                                                                                              1
+
+                                                                       ------------------------------
+
+19 rows selected.
+
+Elapsed: 00:00:00.05
+15:50:29 BOBTFDB1 SQL>@sql
+Enter value for a: 33hr3n63r6kg6
+old   1: select sql_fulltext,EXECUTIONS,FIRST_LOAD_TIME,LAST_ACTIVE_TIME,INST_ID,sql_profile from gv$sqlarea where sql_id='&a'
+new   1: select sql_fulltext,EXECUTIONS,FIRST_LOAD_TIME,LAST_ACTIVE_TIME,INST_ID,sql_profile from gv$sqlarea where sql_id='33hr3n63r6kg6'
+
+SQL_FULLTEXT                                                                     EXECUTIONS FIRST_LOAD_TIME           LAST_ACTIVE_TIME       INST_ID SQL_PROFILE
+-------------------------------------------------------------------------------- ---------- ------------------------- ------------------- ---------- ----------------------------------------------------------------
+select a.ILC,a.EXPORT,a.FINSAME,'0' as ELC_FINSQ,a.IDC_DIR,a.IDC_INDIR,'0'  as I       3210 2021-03-23/09:04:15       23-03-2021 15:51:32          1
+DC_DIRQ,a.ODC_DISPATCH,a.ODC_MTF,a.ODC_MTPN,a.ODC_FINSAME,a.ODC_ADV,'0' as ODC_M
+TFQ,'0'  as ODC_FINSQ,'0'  as ODC_ADVQ,a.FEL,a.FOC,a.FSA,a.CPCI,a.SBLC,a.CPCO,a.
+IGT,a.MISCELLANOUS from (SELECT count(case when  tt.PRODUCTCODE = 'ILC'  then 1
+ end  ) as ILC,count(case when  tt.PRODUCTCODE = 'ELC'  and ( trim(tt.FINANCE_SA
+ME_DAY) ='No' or trim(tt.FINANCE_SAME_DAY) is null) then 1  end  ) as EXPORT,cou
+nt(case when  tt.PRODUCTCODE = 'ELC'  and tt.FINANCE_SAME_DAY = 'Yes' AND (tt.MT
+_RECEIVED           <> 'Full Amount' OR trim(tt.MT_RECEIVED)       IS NULL) then
+ 1  end  ) as FINSAME,count(case when  tt.PRODUCTCODE = 'IDC'  and ( trim(tt.DIR
+ECT) ='false' or trim(tt.DIRECT) is null) then 1  end  ) as IDC_INDIR,count(case
+ when  tt.PRODUCTCODE = 'IDC'  and tt.DIRECT = 'true' then 1  end  ) as IDC_DIR,
+count( (  case when ( ( tt.Document_Dispatch = 'Dispatch' OR ( tt.EVENTCODE
+       = 'CLP' AND tt.DOCUMENT_DISPATCH    IS NULL ) ) AND tt.FINANCE_SAME_DAY
+   <> 'Yes' ) AND (tt.MT_RECEIVED         <> 'Full Amount' OR trim(tt.MT_RECEIVE
+D)     IS NULL) AND (tt.MT_RECEIVED         <> 'Part Amount' OR tt.MT_RECEIVED
+         <> 'None' OR tt.MT_RECEIVED           IS NULL) AND (tt.FINANCE_SAME_DAY
+    <> 'Yes' OR tt.FINANCE_SAME_DAY      IS NULL) AND (tt.SUBPRODUCTCODE      <>
+ 'FBA' OR tt.SUBPRODUCTCODE        IS NULL)  THEN 1 END ))AS ODC_DISPATCH,count(
+ (  case  when tt.PRODUCTCODE = 'ODC' AND (tt.Document_Dispatch     <> 'Dispatch
+' OR trim(tt.Document_Dispatch) IS NULL) AND tt.MT_RECEIVED             = 'Full
+Amount' AND tt.FINANCE_SAME_DAY       <> 'Yes' AND (tt.MT_RECEIVED           <>
+'Part Amount' OR tt.MT_RECEIVED             <> 'None' OR tt.MT_RECEIVED
+    IS NULL) AND (tt.FINANCE_SAME_DAY      <> 'Yes' OR tt.FINANCE_SAME_DAY
+  IS NULL) AND (tt.SUBPRODUCTCODE        <> 'FBA' OR tt.SUBPRODUCTCODE
+IS NULL) THEN 1 END ))AS ODC_MTF, count( (  case  when tt.PRODUCTCODE = 'ODC' AN
+D (tt.Document_Dispatch     <> 'Dispatch' OR trim(tt.Document_Dispatch) IS NULL)
+ AND (tt.MT_RECEIVED           <> 'Full Amount' OR trim(tt.MT_RECEIVED)       IS
+ NULL) AND ( ( tt.MT_RECEIVED   = 'Part Amount' OR tt.MT_RECEIVED   = 'None' ) O
+R (tt.EVENTCODE    = 'CLP' AND tt.MT_RECEIVED            IS NULL) ) AND (tt.FINA
+NCE_SAME_DAY      <> 'Yes' OR tt.FINANCE_SAME_DAY  IS NULL) AND (tt.SUBPRODUCTCO
+DE <> 'FBA' OR tt.SUBPRODUCTCODE IS NULL) THEN 1 END ))AS ODC_MTPN,count(case wh
+en  tt.PRODUCTCODE = 'ODC'  and tt.FINANCE_SAME_DAY = 'Yes'  then 1  end  ) as O
+DC_FINSAME,count(case when  tt.PRODUCTCODE = 'ODC'  and  trim(tt.SUBPRODUCTCODE)
+ ='FBA' AND (tt.Document_Dispatch <> 'Dispatch' OR trim(tt.Document_Dispatch)
+IS NULL) AND (tt.MT_RECEIVED   <> 'Full Amount' OR trim(tt.MT_RECEIVED)  IS NULL
+) AND (tt.FINANCE_SAME_DAY  <> 'Yes' OR tt.FINANCE_SAME_DAY    IS NULL)       th
+en 1  end  )  as ODC_ADV,count(case when  tt.PRODUCTCODE = 'FEL'  then 1  end) a
+s FEL,count(case when  tt.PRODUCTCODE = 'FOC'  then 1  end) as FOC,count(case wh
+en  tt.PRODUCTCODE = 'FSA'  then 1 end)  as FSA,count(case when  tt.PRODUCTCODE
+= 'CPCI' then 1  end) as CPCI,count(case when  tt.PRODUCTCODE = 'ISB'  then 1 en
+d)  as SBLC,count(case when  tt.PRODUCTCODE = 'CPCO' then 1 end)  as CPCO,count(
+case when  tt.PRODUCTCODE = 'IGT'  then 1 end)  as IGT,count(case when  tt.PRODU
+CTCODE = 'COR'  then 1 end)  as MISCELLANOUS FROM TFBO_TRANS tt,TFBO_SUBPRODUCT_
+TEST  ts,TFBO_WORKFLOW tw  WHERE  tt.STEPSTATUS    =  tw.ASSIGNSTATUS  and tw.AS
+SIGNSTATUS   ='Transaction With FBO Scrutinizer'  and TRIM(tt.SOLID)  = :1  and
+tt.PRODUCTCODE = ts.PRODUCTCODE  and tt.SUBPRODUCTCODE = ts.SUBPRODUCTCODE  and
+ts.FGNINLFLAG = 'FGN'  ) a
+
+select a.ILC,a.EXPORT,a.FINSAME,'0' as ELC_FINSQ,a.IDC_DIR,a.IDC_INDIR,'0'  as I       3804 2021-03-23/09:03:53       23-03-2021 15:51:32          2
+DC_DIRQ,a.ODC_DISPATCH,a.ODC_MTF,a.ODC_MTPN,a.ODC_FINSAME,a.ODC_ADV,'0' as ODC_M
+TFQ,'0'  as ODC_FINSQ,'0'  as ODC_ADVQ,a.FEL,a.FOC,a.FSA,a.CPCI,a.SBLC,a.CPCO,a.
+IGT,a.MISCELLANOUS from (SELECT count(case when  tt.PRODUCTCODE = 'ILC'  then 1
+ end  ) as ILC,count(case when  tt.PRODUCTCODE = 'ELC'  and ( trim(tt.FINANCE_SA
+ME_DAY) ='No' or trim(tt.FINANCE_SAME_DAY) is null) then 1  end  ) as EXPORT,cou
+nt(case when  tt.PRODUCTCODE = 'ELC'  and tt.FINANCE_SAME_DAY = 'Yes' AND (tt.MT
+_RECEIVED           <> 'Full Amount' OR trim(tt.MT_RECEIVED)       IS NULL) then
+ 1  end  ) as FINSAME,count(case when  tt.PRODUCTCODE = 'IDC'  and ( trim(tt.DIR
+ECT) ='false' or trim(tt.DIRECT) is null) then 1  end  ) as IDC_INDIR,count(case
+ when  tt.PRODUCTCODE = 'IDC'  and tt.DIRECT = 'true' then 1  end  ) as IDC_DIR,
+count( (  case when ( ( tt.Document_Dispatch = 'Dispatch' OR ( tt.EVENTCODE
+       = 'CLP' AND tt.DOCUMENT_DISPATCH    IS NULL ) ) AND tt.FINANCE_SAME_DAY
+   <> 'Yes' ) AND (tt.MT_RECEIVED         <> 'Full Amount' OR trim(tt.MT_RECEIVE
+D)     IS NULL) AND (tt.MT_RECEIVED         <> 'Part Amount' OR tt.MT_RECEIVED
+         <> 'None' OR tt.MT_RECEIVED           IS NULL) AND (tt.FINANCE_SAME_DAY
+    <> 'Yes' OR tt.FINANCE_SAME_DAY      IS NULL) AND (tt.SUBPRODUCTCODE      <>
+ 'FBA' OR tt.SUBPRODUCTCODE        IS NULL)  THEN 1 END ))AS ODC_DISPATCH,count(
+ (  case  when tt.PRODUCTCODE = 'ODC' AND (tt.Document_Dispatch     <> 'Dispatch
+' OR trim(tt.Document_Dispatch) IS NULL) AND tt.MT_RECEIVED             = 'Full
+Amount' AND tt.FINANCE_SAME_DAY       <> 'Yes' AND (tt.MT_RECEIVED           <>
+'Part Amount' OR tt.MT_RECEIVED             <> 'None' OR tt.MT_RECEIVED
+    IS NULL) AND (tt.FINANCE_SAME_DAY      <> 'Yes' OR tt.FINANCE_SAME_DAY
+  IS NULL) AND (tt.SUBPRODUCTCODE        <> 'FBA' OR tt.SUBPRODUCTCODE
+IS NULL) THEN 1 END ))AS ODC_MTF, count( (  case  when tt.PRODUCTCODE = 'ODC' AN
+D (tt.Document_Dispatch     <> 'Dispatch' OR trim(tt.Document_Dispatch) IS NULL)
+ AND (tt.MT_RECEIVED           <> 'Full Amount' OR trim(tt.MT_RECEIVED)       IS
+ NULL) AND ( ( tt.MT_RECEIVED   = 'Part Amount' OR tt.MT_RECEIVED   = 'None' ) O
+R (tt.EVENTCODE    = 'CLP' AND tt.MT_RECEIVED            IS NULL) ) AND (tt.FINA
+NCE_SAME_DAY      <> 'Yes' OR tt.FINANCE_SAME_DAY  IS NULL) AND (tt.SUBPRODUCTCO
+DE <> 'FBA' OR tt.SUBPRODUCTCODE IS NULL) THEN 1 END ))AS ODC_MTPN,count(case wh
+en  tt.PRODUCTCODE = 'ODC'  and tt.FINANCE_SAME_DAY = 'Yes'  then 1  end  ) as O
+DC_FINSAME,count(case when  tt.PRODUCTCODE = 'ODC'  and  trim(tt.SUBPRODUCTCODE)
+ ='FBA' AND (tt.Document_Dispatch <> 'Dispatch' OR trim(tt.Document_Dispatch)
+IS NULL) AND (tt.MT_RECEIVED   <> 'Full Amount' OR trim(tt.MT_RECEIVED)  IS NULL
+) AND (tt.FINANCE_SAME_DAY  <> 'Yes' OR tt.FINANCE_SAME_DAY    IS NULL)       th
+en 1  end  )  as ODC_ADV,count(case when  tt.PRODUCTCODE = 'FEL'  then 1  end) a
+s FEL,count(case when  tt.PRODUCTCODE = 'FOC'  then 1  end) as FOC,count(case wh
+en  tt.PRODUCTCODE = 'FSA'  then 1 end)  as FSA,count(case when  tt.PRODUCTCODE
+= 'CPCI' then 1  end) as CPCI,count(case when  tt.PRODUCTCODE = 'ISB'  then 1 en
+d)  as SBLC,count(case when  tt.PRODUCTCODE = 'CPCO' then 1 end)  as CPCO,count(
+case when  tt.PRODUCTCODE = 'IGT'  then 1 end)  as IGT,count(case when  tt.PRODU
+CTCODE = 'COR'  then 1 end)  as MISCELLANOUS FROM TFBO_TRANS tt,TFBO_SUBPRODUCT_
+TEST  ts,TFBO_WORKFLOW tw  WHERE  tt.STEPSTATUS    =  tw.ASSIGNSTATUS  and tw.AS
+SIGNSTATUS   ='Transaction With FBO Scrutinizer'  and TRIM(tt.SOLID)  = :1  and
+tt.PRODUCTCODE = ts.PRODUCTCODE  and tt.SUBPRODUCTCODE = ts.SUBPRODUCTCODE  and
+ts.FGNINLFLAG = 'FGN'  ) a
+
+
+Elapsed: 00:00:00.03
+15:51:33 BOBTFDB1 SQL>
+15:52:27 BOBTFDB1 SQL>
+15:52:27 BOBTFDB1 SQL>
+15:52:27 BOBTFDB1 SQL>get ws
+  1  col event form a45
+  2  col wait_class form a15
+  3  col no_of_sessions form 999999
+  4  col avg_wait_time form 999999
+  5  col wait_time form 999999
+  6  clear break
+  7  compute sum of count(1) on no_of_sessions
+  8  select inst_id,event, wait_class, sum(SECONDS_IN_WAIT), sum(WAIT_TIME), count(1) no_of_sessions from gv$session_wait where wait_class <> 'Idle'
+  9  group by inst_id,event, wait_class
+ 10* order by 1
+15:52:31  11
+15:52:32 BOBTFDB1 SQL>
+15:52:32 BOBTFDB1 SQL>@ws
+
+   INST_ID EVENT                                         WAIT_CLASS      SUM(SECONDS_IN_WAIT) SUM(WAIT_TIME) NO_OF_SESSIONS
+---------- --------------------------------------------- --------------- -------------------- -------------- --------------
+         1 PGA memory operation                          Other                              0             -4              4
+         1 db file sequential read                       User I/O                           0              0              2
+         1 enq: TX - row lock contention                 Application                        0              0              4
+         1 gcs log flush sync                            Other                              0              0              1
+         1 latch: cache buffers chains                   Concurrency                        5             -3              5
+         1 transaction                                   Other                              5              0              5
+         2 Disk file operations I/O                      User I/O                           0             -1              1
+         2 PGA memory operation                          Other                              6             -4              4
+         2 direct path read                              User I/O                           0              0              1
+         2 enq: TX - row lock contention                 Application                        9              0             12
+         2 gc cr block 2-way                             Cluster                            1             -2              2
+         2 latch: cache buffers chains                   Concurrency                        2             -1              1
+         2 latch: shared pool                            Concurrency                        0             -1              1
+         2 transaction                                   Other                             12              0             12
+
+14 rows selected.
+
+Elapsed: 00:00:00.04
+15:52:36 BOBTFDB1 SQL>@hold
+
+   INST_ID FINAL_BLOCKING_SESSION FINAL_BLOCKING_INSTANCE   COUNT(1)
+---------- ---------------------- ----------------------- ----------
+         2                   9543                       2          1
+         1                                                      2188
+         2                                                      2207
+
+Elapsed: 00:00:00.06
+15:52:45 BOBTFDB1 SQL>@sid
+Enter value for a: 9543
+old   1: select sid,serial#,inst_id ,process,module,sql_id,prev_sql_id,status from gv$session where sid=&a and username <> 'SYS'
+new   1: select sid,serial#,inst_id ,process,module,sql_id,prev_sql_id,status from gv$session where sid=9543 and username <> 'SYS'
+
+      SID    SERIAL#    INST_ID PROCESS                  MODULE                         SQL_ID        PREV_SQL_ID   STATUS
+--------- ---------- ---------- ------------------------ ------------------------------ ------------- ------------- --------
+     9543      20097          1 1234                     JDBC Thin Client                             9zg9qd9bm4spu INACTIVE
+     9543      27696          2 1234                     JDBC Thin Client                             d8n123qngvf98 INACTIVE
+
+Elapsed: 00:00:00.02
+Enter value for sid_value: 9543
+old   1: Select 'alter system kill session '''||sid||','||serial#||',@'||inst_id||''' immediate;' from gv$session  where sid='&sid_value'
+new   1: Select 'alter system kill session '''||sid||','||serial#||',@'||inst_id||''' immediate;' from gv$session  where sid='9543'
+
+'ALTERSYSTEMKILLSESSION'''||SID||','||SERIAL#||',@'||INST_ID||'''IMMEDIATE;'
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+alter system kill session '9543,20097,@1' immediate;
+alter system kill session '9543,27696,@2' immediate;
+
+Elapsed: 00:00:00.01
+15:53:10 BOBTFDB1 SQL>alter system kill session '9543,20097,@1' immediate;
+alter system kill session '9543,27696,@2' immediate;
+
+
+System altered.
+
+Elapsed: 00:00:00.18
+15:53:19 BOBTFDB1 SQL>
+System altered.
+
+Elapsed: 00:00:00.13
+15:53:19 BOBTFDB1 SQL>15:53:19 BOBTFDB1 SQL>
+15:53:20 BOBTFDB1 SQL>
+15:53:20 BOBTFDB1 SQL>
+15:53:21 BOBTFDB1 SQL>alter system kill session '9543,20097,@1' immediate;
+alter system kill session '9543,20097,@1' immediate
+*
+ERROR at line 1:
+ORA-00030: User session ID does not exist.
+
+
+Elapsed: 00:00:00.00
+15:53:22 BOBTFDB1 SQL>alter system kill session '9543,27696,@2' immediate;
+alter system kill session '9543,27696,@2' immediate
+*
+ERROR at line 1:
+ORA-00030: User session ID does not exist.
+
+
+Elapsed: 00:00:00.01
+15:53:22 BOBTFDB1 SQL>
+15:53:22 BOBTFDB1 SQL>
+15:53:23 BOBTFDB1 SQL>
+15:53:23 BOBTFDB1 SQL>@ws
+
+   INST_ID EVENT                                         WAIT_CLASS      SUM(SECONDS_IN_WAIT) SUM(WAIT_TIME) NO_OF_SESSIONS
+---------- --------------------------------------------- --------------- -------------------- -------------- --------------
+         1 DFS lock handle                               Other                              0              0              1
+         1 PGA memory operation                          Other                              1             -4              4
+         1 SQL*Net message to client                     Network                            0             -5              5
+         1 db file sequential read                       User I/O                           0             -1              3
+         1 gc buffer busy acquire                        Cluster                            0             -5              5
+         1 gc cr block 2-way                             Cluster                            0             -2              2
+         1 rdbms ipc reply                               Other                              0              0              1
+         2 PGA memory operation                          Other                              3             -5              5
+         2 SQL*Net message to client                     Network                            0             -4              4
+         2 db file parallel read                         User I/O                           0              0              1
+         2 db file sequential read                       User I/O                           0              0              1
+         2 direct path read                              User I/O                           0             -1              1
+         2 gc buffer busy acquire                        Cluster                            0             -1              1
+         2 gc current block 2-way                        Cluster                            0             -1              1
+         2 latch: cache buffers chains                   Concurrency                        0             -1              1
+
+15 rows selected.
+
+Elapsed: 00:00:00.07
+15:53:26 BOBTFDB1 SQL>
+
+
+
+102

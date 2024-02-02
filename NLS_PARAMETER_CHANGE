@@ -1,0 +1,11 @@
+shut immediate; 
+startup mount;
+alter system enable  restricted  session;
+alter database open;
+alter database NATIONAL CHARACTER  SET INTERNAL_USE UTF8;
+shut immediate;
+startup;
+
+
+
+

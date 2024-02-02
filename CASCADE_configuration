@@ -1,0 +1,260 @@
+Step 1
+======
+
+CHECK telnet from source to destniation server.
+
+Step 2
+======
+
+Take production backup.
+
+sql 'alter database recover managed standby database cancel';
+   run {
+    allocate channel d1 type disk;
+    allocate channel d2 type disk;
+    allocate channel d3 type disk;
+    allocate channel d4 type disk;
+    allocate channel d5 type disk;
+    allocate channel d6 type disk;
+    allocate channel d7 type disk;
+    allocate channel d8 type disk;
+    allocate channel d9 type disk;
+    allocate channel d10 type disk;
+    crosscheck archivelog all;
+    delete noprompt expired archivelog all;
+    crosscheck backup;
+    delete noprompt expired backup;
+    backup as compressed backupset database format '/findbGC/FJ_BACKUP/BACKUP/BOBFJ_DATAFILE_%d_%s_%p_%T.bkp' tag 'databkp';
+    backup current controlfile format '/findbGC/FJ_BACKUP/BACKUP/BOBFJ_CONTROLFILE_%T_%U.ctl' tag 'controlfilebkp';
+    }
+sql 'alter database recover managed standby database disconnect from session';
+
+Step 3
+======
+
+scp -Cp all the backup files
+
+also SCP the init.ora, REDO log, Control file, Password file in destniation server.
+
+Step 4
+======
+
+Change the init.ora file as per destnation server locations in control file, dump file, audit file etc..
+
+Step 5
+======
+
+set ENV
+
+startup nomount;
+
+Step 6
+======
+
+RMAN> restore controlfile from '/MIGRATION2/FJCBS_CASCADE/BOBFJ/BKP/BOBAEUAT_CONTROLFILE_20191230_1dukmjsi_1_1.ctl';
+
+SQL> alter database mount;
+
+Step 7
+======
+
+SQL> select name,open_mode from v$database;
+
+after getting into mount state connect to rman(using rman  target/)
+
+RMAN> catalog start with '/MIGRATION2/FJCBS_CASCADE/BKP';  ----------------------------copied datafiles location
+
+run
+{
+allocate channel d1 type disk;
+allocate channel d2 type disk;
+allocate channel d3 type disk;
+allocate channel d4 type disk;
+allocate channel d5 type disk;
+allocate channel d6 type disk;
+allocate channel d7 type disk;
+allocate channel d8 type disk;
+allocate channel d9 type disk;
+allocate channel d10 type disk;
+set newname for database to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/DATA/%b';------------new datafile for location
+restore database;
+switch datafile all;
+switch tempfile all;
+}
+
+
+if the above script successful then execute below queries:
+
+select name,open_mode,database_role,controlfile_type from v$database;
+
+select name from v$datafile;
+
+check same number of datafiles are transferred from source side to  target side.
+
+select member from v$logfile;
+
+select name from v$controlfile;
+
+select status from v$instance;
+
+
+Step 7
+======
+
+If production and standby same location SKIP the step 7.
+
+change the Datafile, redo log and control file locations.
+
+
+Redologs
+--------
+
+alter database rename file '/finredo1FJ/BOBFJ/redo/redolog_1aBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo1/redolog_1aBOBFJ.log';
+alter database rename file '/finredo1FJ/BOBFJ/redo/redolog_2aBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo1/redolog_2aBOBFJ.log';
+alter database rename file '/finredo1FJ/BOBFJ/redo/redolog_3aBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo1/redolog_3aBOBFJ.log';
+alter database rename file '/finredo1FJ/BOBFJ/redo/redolog_4aBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo1/redolog_4aBOBFJ.log';
+alter database rename file '/finredoFJ/BOBFJ/redo/redolog_1bBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo2/redolog_1bBOBFJ.log';
+alter database rename file '/finredoFJ/BOBFJ/redo/redolog_2bBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo2/redolog_2bBOBFJ.log';
+alter database rename file '/finredoFJ/BOBFJ/redo/redolog_3bBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo2/redolog_3bBOBFJ.log';
+alter database rename file '/finredoFJ/BOBFJ/redo/redolog_4bBOBFJ.log' to '/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo2/redolog_4bBOBFJ.log';
+
+
+Redologs
+--------
+
+log_file_name_convert
+
+alter system set log_file_name_convert='/finredo1FJ/BOBFJ/redo','/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo1','/finredoFJ/BOBFJ/redo','/MIGRATION2/FJCBS_CASCADE/BOBFJ/REDO/redo2' scope=spfile;
+
+
+Controlfiles
+------------
+
+control_files
+
+DATAFILES
+---------
+
+db_file_name_convert
+
+alter system set db_file_name_convert='/findbFJ/BOBFJ/data','/MIGRATION2/FJCBS_CASCADE/BOBFJ/DATA' scope=spfile;
+
+Step 8
+======
+
+Brought up DB in mount state.
+
+Step 9
+======
+
+Configure the LOG-SHIPPING
+
+PRODUCTION
+==========
+
+
+FC_FJCASCADE =
+  (DESCRIPTION=
+    (ADDRESS_LIST =
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.14.183)(PORT = 1944))
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.14.183)(PORT = 1945))
+     )
+        (CONNECT_DATA =
+          (SID =BOBFJ)
+        )
+   )
+FS_FJCASCADE =
+  (DESCRIPTION=
+    (ADDRESS_LIST =
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.241.7)(PORT = 1944))
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.241.7)(PORT = 1945))
+     )
+        (CONNECT_DATA =
+          (SID =BOBFJ)
+        )
+   )
+
+
+
+DESTINATION
+============
+
+BOBFJ=
+        (DESCRIPTION=
+        (ADDRESS_LIST =
+                (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.241.7)(PORT = 1944))
+                (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.241.7)(PORT = 1945))
+        )
+        (CONNECT_DATA =
+                (SID = BOBFJ)
+        )
+)
+
+
+FC_FJCASCADE =
+  (DESCRIPTION=
+    (ADDRESS_LIST =
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.241.7)(PORT = 1944))
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.241.7)(PORT = 1945))
+     )
+        (CONNECT_DATA =
+          (SID =BOBFJ)
+        )
+   )
+FS_FJCASCADE =
+  (DESCRIPTION=
+    (ADDRESS_LIST =
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.14.183)(PORT = 1944))
+       (ADDRESS = (PROTOCOL=TCP)(HOST = 172.17.14.183)(PORT = 1945))
+     )
+        (CONNECT_DATA =
+          (SID =BOBFJ)
+        )
+   )
+
+
+
+
+
+---------------------------------------DESTINATION------------------------------------------------------------
+
+LISTENER_BOBFJ_CASCADE =
+    (DESCRIPTION =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.241.7)(PORT = 1944)) (queuesize=32)
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.17.241.7)(PORT = 1945)) (queuesize=32)
+        )
+    )
+
+SID_LIST_LISTENER_BOBFJ_CASCADE =
+  (SID_LIST =
+    (SID_DESC =
+      (SDU = 32768)
+      (TDU = 32768)
+      (SID_NAME = BOBFJ)
+      (ORACLE_HOME = /oracle/app_new/ora11204)
+      (ENVS= 'EPC_DISABLED=TRUE')
+    )
+  )
+
+STARTUP_WAIT_TIME_LISTENER_BOBFJ_CASCADE = 0
+CONNECT_TIMEOUT_LISTENER_BOBFJ_CASCADE = 100
+TRACE_LEVEL_LISTENER_BOBFJ_CASCADE =OFF
+LOGGING_LISTENER_BOBFJ_CASCADE =OFF
+SECURE_CONTROL_LISTENER_BOBFJ_CASCADE=(TCP)
+
+
+Step 10
+=======
+
+Create the log-shipping services
+
+alter system set fal_server='FS_FJCASCADE';
+alter system set fal_client='FC_FJCASCADE';
+
+alter system set log_archive_dest_3='SERVICE=FS_FJCASCADE reopen=60 ARCH NOAFFIRM';
+alter system set log_archive_dest_state_3='ENABLE';
+
+
+SQL> ALTER DATABASE RECOVER MANAGED STANDBY DATABASE nodelay DISCONNECT FROM SESSION;
+
+

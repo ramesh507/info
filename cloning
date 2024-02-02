@@ -1,0 +1,554 @@
+pre requsities before migration:
+
+check the database is up and running or not (by using )
+
+select name,open_mode,controlfile_type,database_role from v$database;
+
+check listener is running or not(by using)
+
+ps -ef|grep lsnr
+
+sync 
+
+check the size of the datafiles and controlfiles in source side------------> completed database size 
+
+check the number of datafiles.------> count of datafiles
+
+select sum(BYTES/1024/1024/1024) from dba_data_files;-----> to check the size of the datafiles in database.
+
+check appropriate size in a mount point to fit the datafiles and control files in target side.
+
+
+create pfile='/findb/CBSMU_07012020/pfileCBSMU.ora' from spfile='/findb/dbs/spfileCBSMU.ora';----------------->take pfile backup to required location
+
+**************************************steps for migration************************************
+
+
+source database:
+*****************
+
+shut down the database(if database is in  open-mode & ask  down  time before shutting down the database)
+ 
+start the database in mount state
+
+execute the below script to  take the back up of datafile and controlfiles (make the appropriate directories as per the backup script for storing backup files)
+
+run {
+    allocate channel d1 type disk maxpiecesize=2g; 
+    allocate channel d2 type disk maxpiecesize=2g;
+    allocate channel d3 type disk maxpiecesize=2g;
+    allocate channel d4 type disk maxpiecesize=2g;
+    allocate channel d5 type disk maxpiecesize=2g;
+    allocate channel d6 type disk maxpiecesize=2g;
+    allocate channel d7 type disk maxpiecesize=2g;
+    allocate channel d8 type disk maxpiecesize=2g;
+    allocate channel d9 type disk maxpiecesize=2g;
+    allocate channel d10 type disk maxpiecesize=2g;
+    backup as compressed backupset database format '/findb/BOBUADEV_bkp/BOBUADEV_DATAFILE_%d_%s_%p_%T.bkp' tag 'databkp';
+    backup current controlfile format '/findb/BOBUADEV_bkp/BOBUADEV_CONTROLFILE_%T_%U.ctl' tag 'controlfilebkp';
+    }
+
+
+d------>
+s------->
+p------>
+t--------->
+
+
+for reference:
+**********************************************************************************************************************
+-rw-rw----   1 oracle     dba        2768896 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_13_1_20191218.bkp
+-rw-rw----   1 oracle     dba        10412032 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_14_1_20191218.bkp
+-rw-rw----   1 oracle     dba        12795904 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_15_1_20191218.bkp
+-rw-rw----   1 oracle     dba        43163648 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_16_1_20191218.bkp
+-rw-rw----   1 oracle     dba        87302144 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_17_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207757312 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_19_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207650816 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_18_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207675392 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_20_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207740928 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_2_20191218.bkp
+-rw-rw----   1 oracle     dba        85426176 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_20_2_20191218.bkp
+-rw-rw----   1 oracle     dba        207642624 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_19_2_20191218.bkp
+-rw-rw----   1 oracle     dba        79036416 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_3_20191218.bkp
+-rw-rw----   1 oracle     dba        77520896 Dec 18 18:10 SG_DATAFILE_BOBSGDEV_19_3_20191218.bkp
+-rw-rw----   1 oracle     dba        14942208 Dec 18 18:10 SG_CONTROL_20191218_0lujoila_1_1.ctl
+****************************************************************************************************************************
+
+if the database is running with  spfile(by  using)
+
+show parameter spfile;
+
+if runs with spfile then create a pfile using spfile.(by using)
+
+create pfile from  spfile;
+
+for reference:
+***************************************
+-rw-rw-r--   1 oracle     dba           1748 Dec 18 18:37 initBOBSGDEV.ora
+*******************************************
+
+and move the created pfile to the rman backup location.
+
+for reference:
+**********************************************************************************************************************
+-rw-rw----   1 oracle     dba        2768896 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_13_1_20191218.bkp
+-rw-rw----   1 oracle     dba        10412032 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_14_1_20191218.bkp
+-rw-rw----   1 oracle     dba        12795904 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_15_1_20191218.bkp
+-rw-rw----   1 oracle     dba        43163648 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_16_1_20191218.bkp
+-rw-rw----   1 oracle     dba        87302144 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_17_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207757312 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_19_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207650816 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_18_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207675392 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_20_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207740928 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_2_20191218.bkp
+-rw-rw----   1 oracle     dba        85426176 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_20_2_20191218.bkp
+-rw-rw----   1 oracle     dba        207642624 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_19_2_20191218.bkp
+-rw-rw----   1 oracle     dba        79036416 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_3_20191218.bkp
+-rw-rw----   1 oracle     dba        77520896 Dec 18 18:10 SG_DATAFILE_BOBSGDEV_19_3_20191218.bkp
+-rw-rw----   1 oracle     dba        14942208 Dec 18 18:10 SG_CONTROL_20191218_0lujoila_1_1.ctl
+-rw-rw-r--   1 oracle     dba           1748 Dec 18 18:37 initBOBSGDEV.ora
+****************************************************************************************************************************
+
+and zip the backup files if the size of the files is high
+
+before moving the backup  files to the target location, create a directory on target side to store the backup files.
+
+for reference:
+***********************************************************
+scp -Cp initBOBUADEV.ora. oracle@/MIGRATION/BOBAEUAT/datafiles
+scp -Cp BOBUADEV_CONTROLFILE_20191230_0buknihi_1_1.ctl oracle@172.16.252.212:/MIGRATION/BOBAEUAT/control_files
+scp -Cp *.gz oracle@172.16.252.212:/MIGRATION/BOBAEUAT/datafiles
+*******************************************************************
+target side:
+***********
+after receiving the backup files,check whether the files are in a directory that is  particularly created for storing the backup files.
+
+for reference:
+**********************************************************************************************************
+FIN10INUATDB01#/findb/BOBSGDEV>ls -lrt
+total 2835632
+-rw-rw----   1 oracle     dba        2768896 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_13_1_20191218.bkp
+-rw-rw----   1 oracle     dba        10412032 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_14_1_20191218.bkp
+-rw-rw----   1 oracle     dba        12795904 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_15_1_20191218.bkp
+-rw-rw----   1 oracle     dba        43163648 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_16_1_20191218.bkp
+-rw-rw----   1 oracle     dba        87302144 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_17_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207757312 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_19_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207650816 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_18_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207675392 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_20_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207740928 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_2_20191218.bkp
+-rw-rw----   1 oracle     dba        85426176 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_20_2_20191218.bkp
+-rw-rw----   1 oracle     dba        207642624 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_19_2_20191218.bkp
+-rw-rw----   1 oracle     dba        79036416 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_3_20191218.bkp
+-rw-rw----   1 oracle     dba        77520896 Dec 18 18:10 SG_DATAFILE_BOBSGDEV_19_3_20191218.bkp
+-rw-rw----   1 oracle     dba        14942208 Dec 18 18:10 SG_CONTROL_20191218_0lujoila_1_1.ctl
+-rw-rw-r--   1 oracle     dba           1748 Dec 18 18:37 initBOBSGDEV.ora
+**********************************************************************************************************************
+
+make separate directories to store the datafiles and controlfiles and redologs after restoring the  database.
+
+for reference:
+***********************************************************************************************************
+FIN10INUATDB01#/findb/BOBSGDEV>ls -lrt
+total 2835632
+-rw-rw----   1 oracle     dba        2768896 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_13_1_20191218.bkp
+-rw-rw----   1 oracle     dba        10412032 Dec 18 18:05 SG_DATAFILE_BOBSGDEV_14_1_20191218.bkp
+-rw-rw----   1 oracle     dba        12795904 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_15_1_20191218.bkp
+-rw-rw----   1 oracle     dba        43163648 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_16_1_20191218.bkp
+-rw-rw----   1 oracle     dba        87302144 Dec 18 18:06 SG_DATAFILE_BOBSGDEV_17_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207757312 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_19_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207650816 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_18_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207675392 Dec 18 18:08 SG_DATAFILE_BOBSGDEV_20_1_20191218.bkp
+-rw-rw----   1 oracle     dba        207740928 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_2_20191218.bkp
+-rw-rw----   1 oracle     dba        85426176 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_20_2_20191218.bkp
+-rw-rw----   1 oracle     dba        207642624 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_19_2_20191218.bkp
+-rw-rw----   1 oracle     dba        79036416 Dec 18 18:09 SG_DATAFILE_BOBSGDEV_18_3_20191218.bkp
+-rw-rw----   1 oracle     dba        77520896 Dec 18 18:10 SG_DATAFILE_BOBSGDEV_19_3_20191218.bkp
+-rw-rw----   1 oracle     dba        14942208 Dec 18 18:10 SG_CONTROL_20191218_0lujoila_1_1.ctl
+-rw-rw-r--   1 oracle     dba           1748 Dec 18 18:37 initBOBSGDEV.ora
+drwxr-xr-x   2 oracle     dba             96 Dec 18 19:20 data
+drwxr-xr-x   2 oracle     dba             96 Dec 18 19:20 control
+drwxr-xr-x   2 oracle     dba             96 Dec 18 19:20 redo
+*************************************************************************************************************
+
+edit the backup pfile with appropriate changes(like control file location,adump location,db_name,audit file location)and changes as per client requirement(like sga,processors etc if required).
+****create locations before editing in the pfile.
+and place the pfile in the dbs directory.
+
+after placing pfile in the dbs directory bring the database to nomount state(using *startup nomount*)
+
+for reference:
+**********************************************************
+startup nomount;
+ORACLE instance started.
+
+Total System Global Area 1.0737E+10 bytes
+Fixed Size                 12475976 bytes
+Variable Size            1610612736 bytes
+Database Buffers         9093251072 bytes
+Redo Buffers               21078016 bytes
+*************************************************************
+
+
+
+show parameter dump -------------> take alert log session and watch
+
+
+after getting into nomount state connect to rman (using rman target /)
+
+after connecting to rman restore control file from the backup stored location.
+
+for reference:
+*********************************************************************************************
+**********************************************************************************************
+RMAN> restore controlfile from '/MIGRATION/BOBAEUAT/control/BOBAEUAT_CONTROLFILE_20191230_1dukmjsi_1_1.ctl';
+
+BOBMUDEV_CONTROLFILE_20191226_1oukc1hv_1_1.ctl
+*********************************************************************************************
+output should be:
+***********************
+Starting restore at 18-DEC-19
+using target database control file instead of recovery catalog
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=388 device type=DISK
+
+channel ORA_DISK_1: restoring control file
+channel ORA_DISK_1: restore complete, elapsed time: 00:00:01
+output file name=/findb/BOBSGDEV/control/control01.ctl
+output file name=/findb/BOBSGDEV/control/control02.ctl
+Finished restore at 18-DEC-19
+**********************************************************************************************
+***********************************************************************************************
+
+after restoring the controlfile bring the database to mount state.
+
+for reference:
+************************************
+SQL> alter database mount;
+
+Database altered.
+******************************************
+
+SQL> select name,open_mode from v$database;
+
+after getting into mount state connect to rman(using rman  target/)
+
+after connecting to rman, start with catalog (using *catalog start with 'location where backup files are stored'*)
+
+for reference:
+*************************************************************************************
+RMAN> catalog start with '/MIGRATION/BOBAEUAT/datafiles';  ----------------------------copied datafiles location
+
+searching for all files that match the pattern /findb/BOBSGDEV/
+
+List of Files Unknown to the Database
+=====================================
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_13_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_14_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_15_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_16_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_17_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_18_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_18_2_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_18_3_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_19_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_19_2_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_19_3_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_20_1_20191218.bkp
+File Name: /findb/BOBSGDEV/SG_DATAFILE_BOBSGDEV_20_2_20191218.bkp
+******************************************************************************************************
+
+
+after this run down the below script(to set a new database name and required changes in the datafiles and control files and redolog files)
+
+
+
+
+------------------------------------->if it is different versions like IBM to HP-UNIX you can take only two channels 
+than oney it will apply after also it wont show the datafiles but it will resotre it
+
+
+
+
+
+RMAN>  run
+2> {
+3>  allocate channel d1 type disk;
+4>  allocate channel d2 type disk;
+5>  allocate channel d3 type disk;
+6>  allocate channel d4 type disk;
+7>  allocate channel d5 type disk;
+8>  allocate channel d6 type disk;
+9>  allocate channel d7 type disk;
+10>  allocate channel d8 type disk;
+11>  allocate channel d9 type disk;
+12>  allocate channel d10 type disk;
+13>  set newname for database to '/findb/BOBMUDEV/DATAFILES/%b';------------new location for location
+14>  restore database;
+15>  switch datafile all;
+16>  switch tempfile all;
+17>  }
+
+run
+{
+allocate channel d1 type disk;
+allocate channel d2 type disk;
+allocate channel d3 type disk;
+allocate channel d4 type disk;
+allocate channel d5 type disk;
+allocate channel d6 type disk;
+allocate channel d7 type disk;
+allocate channel d8 type disk;
+allocate channel d9 type disk;
+allocate channel d10 type disk;
+set newname for database to '/findb/BOBMUDEV/DATAFILES/%b';------------new location for location
+restore database;
+switch datafile all;
+switch tempfile all;
+}
+
+
+if the above script successful then execute below queries:
+
+select name,open_mode,database_role,controlfile_type from v$database;
+
+**********************************************************************************
+NAME      OPEN_MODE            DATABASE_ROLE    CONTROL
+--------- -------------------- ---------------- -------
+BOBSGDEV  MOUNTED              PRIMARY          BACKUP
+********************************************************************************
+
+select distinct checkpoint_change#,fuzzy from v$datafile_header;
+
+************************************************
+CHECKPOINT_CHANGE# FUZ
+------------------ ---
+          12731974 NO
+*************************************************
+
+select name from v$datafile;
+
+check same number of datafiles are transferred from source side to  target side.
+
+select member from v$logfile;
+
+select name from v$controlfile;
+
+select status from v$instance;
+
+
+after executing the above queries rename the log files:
+
+for reference:
+************************************************************************************************************************
+                                                  avail location to new created location
+
+alter database rename file '/findbSG/BOBSGDEV/REDO/redo01.log' to '/findb/BOBMUDEV/redo/redo01.log';
+alter database rename file '/findbSG/BOBSGDEV/REDO/redo02.log' to '/findb/BOBMUDEV/redo/redo02.log';
+alter database rename file '/findbSG/BOBSGDEV/REDO/redo03.log' to '/findb/BOBMUDEV/redo/redo03.log';
+alter database rename file '/findbSG/BOBSGDEV/REDO/redo01b.log' to '/findb/BOBMUDEV/redo/redo01b.log';
+alter database rename file '/findbSG/BOBSGDEV/REDO/redo02b.log' to '/findb/BOBMUDEV/redo/redo02b.log';
+alter database rename file '/MIGRATION/BOBMUDEV/redo/redo03a.log' to '/findb/BOBMUDEV/redo/redo03b.log';
+************************************************************************************************************************
+
+
+after renaming the log files open the database with  reset logs(using *alter database open RESETLOGS;*)
+
+for reference:
+*******************************************************************
+SQL> alter database open RESETLOGS;
+
+Database altered.
+**********************************************************************
+
+if the database is altered then  execute the below queries:
+
+select name,open_mode,database_role,controlfile_type from v$database;
+
+for reference:
+************************************************************************************************
+NAME      OPEN_MODE            DATABASE_ROLE    CONTROL
+--------- -------------------- ---------------- -------
+BOBSGDEV  READ WRITE           PRIMARY          CURRENT
+***************************************************************************************************
+
+select current_scn from v$database;
+
+for reference:
+************************************************************************************************
+CURRENT_SCN
+-----------
+   12734906
+************************************************************************************************
+
+select unique status from v$backup;
+
+for reference:
+************************************************************************************************
+STATUS
+------------------
+NOT ACTIVE
+************************************************************************************************
+
+select member from v$logfile;
+
+for reference:
+************************************************************************************************
+MEMBER
+--------------------------------------------------------------------------------
+/findb/BOBSGDEV/redo/redo03.log
+/findb/BOBSGDEV/redo/redo02.log
+/findb/BOBSGDEV/redo/redo01.log
+/findb/BOBSGDEV/redo/redo01b.log
+/findb/BOBSGDEV/redo/redo02b.log
+/findb/BOBSGDEV/redo/redo03b.log
+************************************************************************************************
+
+after getting into mount state create  a listener and tnsnames in $ORACLE_HOME/network/admin
+
+for reference
+****************************************************************************************
+listener:
+
+SID_LIST_LISTENER_BOBMUDEV =
+  (SID_LIST =
+    (SID_DESC =
+      (SID_NAME = BOBMUDEV)
+      (ORACLE_HOME = /findb)
+      (ENVS= 'EPC_DISABLED=TRUE')
+    )
+  )
+
+LISTENER_BOBMUDEV =
+    (DESCRIPTION =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.252.212)(PORT = 1527) (queuesize=32)
+        )
+    )
+*************************************
+tnsnames:
+
+BOBAEUAT =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.252.212)(PORT = 1530))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = BOBAEUAT)
+    )
+  )
+
+
+LISTENER_BOBAEUAT =
+    (DESCRIPTION =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.252.212)(PORT = 1530) 
+       (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = BOBAEUAT)
+    )
+  )
+
+**************************************************************************************************************
+
+after this give the listener configurations to application team for tnsalias.
+
+
+
+gunzip *.gz &
+
+
+
+
+
+
+
+
+LISTENER_CBSSG =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1535))
+      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1535))
+    )
+  )
+
+LISTENER_CSISSG =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1538))
+    )
+  )
+
+LISTENER_CBSMU =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1537))
+    )
+  )
+
+LISTENER_CSISMU =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1540))
+    )
+  )
+
+LISTENER_CBSAE =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1536))
+    )
+  )
+
+LISTENER_CSISAE =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1539))
+    )
+  )
+LISTENER_BOBSGDEV =
+  (DESCRIPTION_LIST =
+    (DESCRIPTION =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = FIN10INUATDB01)(PORT = 1541))
+    )
+  )
+SID_LIST_LISTENER_BOBSGDEV =
+  (SID_LIST =
+    (SID_DESC =
+      (SID_NAME = BOBSGDEV)
+      (ORACLE_HOME = /findb)
+      (ENVS= 'EPC_DISABLED=TRUE')
+    )
+  )
+
+SID_LIST_LISTENER_BOBMUDEV =
+  (SID_LIST =
+    (SID_DESC =
+      (SID_NAME = BOBMUDEV)
+      (ORACLE_HOME = /findb)
+      (ENVS= 'EPC_DISABLED=TRUE')
+    )
+  )
+
+LISTENER_BOBMUDEV =
+    (DESCRIPTION =
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.251.130)(PORT = 1542) 
+        )
+    )
+
+
+
+
+
+
+
+
+
+
+permission owner as dba change:
+
+chown -R oracle:dba /MIGRATION1
+
+
+
+pfile must databasename.ora    
+
+
+ mv initBOBUADEV.ora initBOBAEUAT.ora
+
+
+

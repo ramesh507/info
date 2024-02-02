@@ -1,0 +1,77 @@
+*-STOP DB SERVICES on BOTH NODES.
+
+srvctl stop database -d PROD
+
+
+Disk addition 
+
+sudo su - oragrid
+
+asmcmd lsdg
+
+sqlplus / as sysasm
+
+set lines 199 pages 199
+
+
+col path for a55
+select NAME,GROUP_NUMBER from v$asm_diskgroup;
+
+select * from gv$asm_operation;
+
+select GROUP_NUMBER,DISK_NUMBER,name,path,TOTAL_MB, FREE_MB from v$asm_disk_stat where GROUP_NUMBER=5 order by GROUP_NUMBER,name ;
+
+select GROUP_NUMBER,DISK_NUMBER,name,path,TOTAL_MB, FREE_MB from v$asm_disk  where GROUP_NUMBER=5 order by GROUP_NUMBER,name;
+
+
+
+show parameter asm_power_limit;
+
+alter system set asm_power_limit=10;
+
+select path,MOUNT_STATUS ,HEADER_STATUS,MODE_STATUS,STATE from v$asm_disk where PATH in ('/dev/rdisk/ORA_PDATA67','/dev/rdisk/ORA_PDATA68');
+
+PATH                                                    MOUNT_S HEADER_STATU MODE_ST STATE
+------------------------------------------------------- ------- ------------ ------- --------
+/dev/rdisk/ORA_PDATA68                                  CLOSED  CANDIDATE    ONLINE  NORMAL
+/dev/rdisk/ORA_PDATA67                                  CLOSED  CANDIDATE    ONLINE  NORMAL
+
+
+
+alter diskgroup PROD_DATA_DG01 add disk '/dev/rdisk/ORA_PDATA67','/dev/rdisk/ORA_PDATA68';
+
+
+select path,MOUNT_STATUS ,HEADER_STATUS,MODE_STATUS,STATE from v$asm_disk where PATH in ('/dev/rdisk/ORA_PDATA67','/dev/rdisk/ORA_PDATA68');
+
+PATH                                                    MOUNT_S HEADER_STATU MODE_ST STATE
+------------------------------------------------------- ------- ------------ ------- --------
+/dev/rdisk/ORA_PDATA68                                  CACHED  MEMBER       ONLINE  NORMAL
+/dev/rdisk/ORA_PDATA67                                  CACHED  MEMBER       ONLINE  NORMAL
+
+
+
+select GROUP_NUMBER,DISK_NUMBER,name,path,TOTAL_MB, FREE_MB from v$asm_disk_stat order by GROUP_NUMBER;
+
+select * from gv$asm_operation; 
+
+
+If rebalancing not done automatically then
+
+alter system set asm_power_limit=10;
+alter diskgroup PROD_DATA_DG01 rebalance power 10 ;
+
+
+No row selected 
+
+asmcmd lsdg
+
+START DB SERVICES on BOTH NODES.
+
+srvctl start database -d PROD -i PROD1 -o mount
+
+alter database recover managed standby database disconncect from session;  ( Start recovery )
+
+
+
+
+

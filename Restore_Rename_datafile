@@ -1,0 +1,412 @@
+/findbUG/BOBUG_RESTORATION/data
+
+/findbUG/BOBUG_RESTORATION/findbUG/BOBUG/ctl/control_01_BOBUG.ctl
+/findbUG/BOBUG_RESTORATION/finredoUG/BOBUG/ctl/control_02_BOBUG.ctl
+/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/ctl/control_03_BOBUG.ctl
+
+/findbUG/BOBUG_RESTORATION/oracle11gUG/ora11g/BOBUG/redo/redolog_2bBOBUG.log
+/findbUG/BOBUG_RESTORATION/oracle11gUG/ora11g/BOBUG/redo/redolog_4bBOBUG.log
+
+/findbUG/BOBUG_RESTORATION/finredoUG/BOBUG/redo/redolog_1bBOBUG.log
+/findbUG/BOBUG_RESTORATION/finredoUG/BOBUG/redo/redolog_3bBOBUG.log
+/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_1aBOBUG.log
+/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_2aBOBUG.log
+/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_3aBOBUG.log
+/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_4aBOBUG.log
+
+ /oracleAE/app/ora11g/bin/tnslsnr LISTENER_BOBUG
+
+/oracleAE/app/ora11g/dbs>cat initBOBUG.ora
+*._b_tree_bitmap_plans=FALSE
+*._gby_hash_aggregation_enabled=FALSE
+*._ksmg_granule_size=33554432
+*._ktb_debug_flags=8
+*._optim_peek_user_binds=FALSE
+*._optimizer_adaptive_cursor_sharing=FALSE
+*._optimizer_cost_based_transformation='OFF'
+*._optimizer_extended_cursor_sharing_rel='none'
+*._optimizer_skip_scan_enabled=FALSE
+*._optimizer_sortmerge_join_enabled=FALSE
+*._optimizer_use_feedback=false
+*._trace_files_public=TRUE
+*._undo_autotune=FALSE
+*.archive_lag_target=300
+*.audit_file_dest='/findbUG/BOBUG_RESTORATION/findbUG/BOBUG/audit'
+*.audit_sys_operations=true
+*.audit_trail='DB'
+*.compatible='11.2.0.4'
+*.control_files='/findbUG/BOBUG_RESTORATION/findbUG/BOBUG/ctl/control_01_BOBUG.ctl','/findbUG/BOBUG_RESTORATION/finredoUG/BOBUG/ctl/control_02_BOBUG.ctl','/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/ctl/control_03_BOBUG.ctl'
+*.core_dump_dest='/findbUG/BOBUG_RESTORATION/findbUG/BOBUG/cdump'
+*.db_block_size=8192
+*.db_cache_size=524288000
+*.db_file_multiblock_read_count=8# LARGE
+*.db_files=2000
+*.db_name='BOBUG'
+*.db_recovery_file_dest_size=5368709120
+*.db_recovery_file_dest='/findbUG/BOBUG_RESTORATION/findbUG/BOBUG'
+*.disk_asynch_io=TRUE
+*.dml_locks=1000
+*.hpux_sched_noage=178
+*.java_pool_size=73400320
+*.job_queue_processes=1
+*.large_pool_size=1048576
+*.log_archive_dest_1='location=/findbUG/BOBUG_RESTORATION'
+*.log_archive_format='BOBUG_%T_%R_%S.arc'
+*.log_archive_max_processes=20
+*.log_buffer=1048576
+*.log_checkpoint_interval=31457290
+*.log_checkpoint_timeout=0
+*.log_checkpoints_to_alert=TRUE
+*.max_dump_file_size='10240'# limit trace file
+*.NLS_DATE_FORMAT='DD-MM-YYYY'
+*.open_cursors=4000
+*.OPTIMIZER_MODE='CHOOSE'
+*.optimizer_secure_view_merging=FALSE
+*.parallel_max_servers=4
+*.processes=800
+*.resource_limit=TRUE
+*.resource_manager_plan=''
+*.resumable_timeout=7200
+*.session_cached_cursors=50
+*.session_max_open_files=25
+*.sga_max_size=1258291200
+*.sga_target=1258291200
+*.shared_pool_reserved_size=10485760
+*.shared_pool_size=104857600
+*.sort_area_size=1048576
+*.standby_file_management='AUTO'
+*.streams_pool_size=78643200
+*.timed_statistics=true# if you want timed statistics
+*.UNDO_MANAGEMENT='AUTO'
+*.undo_retention=3600
+*.UNDO_TABLESPACE='UNDO_TBLSPC'
+
+
+export ORACLE_SID=BOBUG
+export ORACLE_HOME=/oracleAE/app/ora11g
+export PATH=/oracleAE/app/ora11g/bin:$PATH
+sqlplus / as sysdba
+
+startup nomount pfile='/oracleAE/app/ora11g/dbs/initBOBUG.ora'
+
+alter database mount;
+
+SQL> show parameter standby_file_management;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+standby_file_management              string      AUTO
+SQL>
+SQL>
+SQL> alter system set standby_file_management='MANUAL';
+
+System altered.
+
+SQL> show parameter standby_file_management;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+standby_file_management              string      MANUAL
+
+
+/findbUG/BOBUG_RESTORATION/data
+
+alter database rename file '/findbUG/BOBUG/data/system_1_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/system_1_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/undo_tblspc_1_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/undo_tblspc_1_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/REFERENCE_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/REFERENCE_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/CONTROL_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/CONTROL_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/CENTRAL_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/CENTRAL_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/B2K_TEMP_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/B2K_TEMP_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/B2K_SYSTEM_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/B2K_SYSTEM_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/TFIN_HISTORY_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TFIN_HISTORY_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/CUST_DETAILS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/CUST_DETAILS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ACCT_DETAILS_1_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACCT_DETAILS_1_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TRANS_01_BOBUG.dbf';
+
+alter database rename file '/findbUG/BOBUG/data/MASTER2_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/MASTER2_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/LOG_HISTORY_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/LOG_HISTORY_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/LIMIT_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/LIMIT_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/GL_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/GL_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ACCT_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACCT_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ACCT_MASTER_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACCT_MASTER_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ACCT_DETAILS_2_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACCT_DETAILS_2_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ACCT_DETAILS_3_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACCT_DETAILS_3_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/OTHER_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/OTHER_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_REFERENCE_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_REFERENCE_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_CONTROL_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_CONTROL_01_BOBUG.dbf';
+
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/IDX_CENTRAL_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_CENTRAL_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_B2K_TEMP_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_B2K_TEMP_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_B2K_SYSTEM_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_B2K_SYSTEM_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_TFIN_HISTORY_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_TFIN_HISTORY_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_CUST_DETAILS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_CUST_DETAILS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ACCT_DETAILS_1_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACCT_DETAILS_1_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_MASTER2_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_MASTER2_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_LOG_HISTORY_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_LOG_HISTORY_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_LIMIT_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_LIMIT_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_GL_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_GL_TRANS_01_BOBUG.dbf';
+
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/IDX_ACCT_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACCT_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ACCT_MASTER_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACCT_MASTER_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ACCT_DETAILS_2_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACCT_DETAILS_2_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ACCT_DETAILS_3_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACCT_DETAILS_3_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_OTHER_TRANS_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_OTHER_TRANS_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/HTD_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/HTD_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/HTH_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/HTH_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IMT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IMT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ADT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ADT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/EAB_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/EAB_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDT_TBLSPC_01_BOBUG.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/TAM_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TAM_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/GAM_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/GAM_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/NMA_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/NMA_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ICI_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ICI_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/CMG_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/CMG_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/EIT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/EIT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/TDT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TDT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/OCI_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/OCI_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/RTT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/RTT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ATA_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ATA_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ATO_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ATO_TBLSPC_01_BOBUG.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/AAS_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/AAS_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/ICP_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ICP_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/INT_ADM_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/INT_ADM_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/OCP_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/OCP_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/ITC_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ITC_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/CBT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/CBT_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/BAT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/BAT_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/HOC_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/HOC_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/DAT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/DAT_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/TDS_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TDS_TBLSPC_01_BOBUG.dbf'; 
+alter database rename file '/findbUG/BOBUG/data/ACH_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACH_TBLSPC_01_BOBUG.dbf'; 
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/ACD_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/ACD_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/DTD_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/DTD_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/DTH_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/DTH_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_HTD_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_HTD_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_HTH_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_HTH_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_IMT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_IMT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ADT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ADT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_EAB_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_EAB_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_IDT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_IDT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_TAM_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_TAM_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_GAM_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_GAM_TBLSPC_01_BOBUG.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/IDX_NMA_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_NMA_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ICI_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ICI_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_CMG_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_CMG_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_EIT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_EIT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_TDT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_TDT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_OCI_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_OCI_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_RTT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_RTT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ATA_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ATA_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ATO_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ATO_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_AAS_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_AAS_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ICP_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ICP_TBLSPC_01_BOBUG.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/IDX_INT_ADM_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_INT_ADM_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_OCP_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_OCP_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ITC_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ITC_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_CBT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_CBT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_BAT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_BAT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_HOC_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_HOC_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_DAT_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_DAT_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_TDS_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_TDS_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ACH_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACH_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_ACD_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_ACD_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_DTD_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_DTD_TBLSPC_01_BOBUG.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/IDX_DTH_TBLSPC_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_DTH_TBLSPC_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IMT_TBLSPC_02_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IMT_TBLSPC_02_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IMT_TBLSPC_03_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IMT_TBLSPC_03_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/bob_custom_tblspace_1.dbf' to '/findbUG/BOBUG_RESTORATION/data/bob_custom_tblspace_1.dbf';
+alter database rename file '/findbUG/BOBUG/data/bob_custom_idx_tblspace_1.dbf' to '/findbUG/BOBUG_RESTORATION/data/bob_custom_idx_tblspace_1.dbf';
+alter database rename file '/findbUG/BOBUG/data/PERFSTAT.dbf' to '/findbUG/BOBUG_RESTORATION/data/PERFSTAT.dbf';
+alter database rename file '/findbUG/BOBUG/data/in_control_1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/in_control_1_DBNAME.dbf';
+alter database rename file '/findbUG/BOBUG/data/idx_in_control_1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/idx_in_control_1_DBNAME.dbf';
+alter database rename file '/findbUG/BOBUG/data/in_trans_1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/in_trans_1_DBNAME.dbf';
+alter database rename file '/findbUG/BOBUG/data/idx_in_trans_1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/idx_in_trans_1_DBNAME.dbf';
+alter database rename file '/findbUG/BOBUG/data/in_history_1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/in_history_1_DBNAME.dbf';
+
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/idx_in_history_1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/idx_in_history_1_DBNAME.dbf';
+alter database rename file '/findbUG/BOBUG/data/TBA_TEMP_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TBA_TEMP_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/temp_tablespace1_DBNAME.dbf' to '/findbUG/BOBUG_RESTORATION/data/temp_tablespace1_DBNAME.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_01.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_01.dbf';
+alter database rename file '/findbUG/BOBUG/data/sysaux01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/sysaux01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_LOG_HISTORY_02_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_LOG_HISTORY_02_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_02.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_02.dbf';
+alter database rename file '/findbUG/BOBUG/data/HTD_TBLSPC_02_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/HTD_TBLSPC_02_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_03.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_03.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_HTD_TBLSPC_02_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_HTD_TBLSPC_02_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/DBMAINTENANCE.dbf' to '/findbUG/BOBUG_RESTORATION/data/DBMAINTENANCE.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/LOG_HISTORY_02_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/LOG_HISTORY_02_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/Audindx_01.dbf' to '/findbUG/BOBUG_RESTORATION/data/Audindx_01.dbf';
+alter database rename file '/findbUG/BOBUG/data/HTD_TBLSPC_03_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/HTD_TBLSPC_03_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_04.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_04.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_05.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_05.dbf';
+alter database rename file '/findbUG/BOBUG/data/HTD_TBLSPC_04_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/HTD_TBLSPC_04_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/LOG_HISTORY_03_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/LOG_HISTORY_03_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IMT_TBLSPC_04_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IMT_TBLSPC_04_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/IDX_LOG_HISTORY_03_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_LOG_HISTORY_03_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/B2K_TEMP_02_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/B2K_TEMP_02_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_06.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_06.dbf';
+
+NAME
+--------------------------------------------------------------------------------
+alter database rename file '/findbUG/BOBUG/data/IDX_HTD_TBLSPC_03_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/IDX_HTD_TBLSPC_03_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/bob_custom_tblspace_2.dbf' to '/findbUG/BOBUG_RESTORATION/data/bob_custom_tblspace_2.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_07.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_07.dbf';
+alter database rename file '/findbUG/BOBUG/data/tools_08.dbf' to '/findbUG/BOBUG_RESTORATION/data/tools_08.dbf';
+
+SQL> select member from v$logfile;
+
+alter database rename file '/finredoUG/BOBUG/redo/redolog_1bBOBUG.log' to '/findbUG/BOBUG_RESTORATION/finredoUG/BOBUG/redo/redolog_1bBOBUG.log';
+alter database rename file '/finredo1UG/BOBUG/redo/redolog_1aBOBUG.log' to '/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_1aBOBUG.log';
+alter database rename file '/finredo1UG/BOBUG/redo/redolog_2aBOBUG.log' to '/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_2aBOBUG.log';
+alter database rename file '/oracle11gUG/ora11g/BOBUG/redo/redolog_2bBOBUG.log' to '/findbUG/BOBUG_RESTORATION/oracle11gUG/ora11g/BOBUG/redo/redolog_2bBOBUG.log';
+alter database rename file '/finredoUG/BOBUG/redo/redolog_3bBOBUG.log' to '/findbUG/BOBUG_RESTORATION/finredoUG/BOBUG/redo/redolog_3bBOBUG.log';
+alter database rename file '/finredo1UG/BOBUG/redo/redolog_3aBOBUG.log' to '/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_3aBOBUG.log';
+alter database rename file '/finredo1UG/BOBUG/redo/redolog_4aBOBUG.log' to '/findbUG/BOBUG_RESTORATION/finredo1UG/BOBUG/redo/redolog_4aBOBUG.log';
+alter database rename file '/oracle11gUG/ora11g/BOBUG/redo/redolog_4bBOBUG.log' to '/findbUG/BOBUG_RESTORATION/oracle11gUG/ora11g/BOBUG/redo/redolog_4bBOBUG.log';
+
+SQL> select name from v$tempfile;
+
+alter database rename file '/findbUG/BOBUG/data/temp_tblspc_1_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/temp_tblspc_1_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/temp_perfstat.dbf' to '/findbUG/BOBUG_RESTORATION/data/temp_perfstat.dbf';
+alter database rename file '/findbUG/BOBUG/data/TEMP2_tblspc01.dbf' to '/findbUG/BOBUG_RESTORATION/data/TEMP2_tblspc01.dbf';
+alter database rename file '/findbUG/BOBUG/data/TEMP2_01_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/TEMP2_01_BOBUG.dbf';
+alter database rename file '/findbUG/BOBUG/data/TEMP_DBMAINTENANCE.dbf' to '/findbUG/BOBUG_RESTORATION/data/TEMP_DBMAINTENANCE.dbf';
+alter database rename file '/findbUG/BOBUG/data/temp_tblspc_2_BOBUG.dbf' to '/findbUG/BOBUG_RESTORATION/data/temp_tblspc_2_BOBUG.dbf';
+
+
+SQL> ALTER DATABASE ACTIVATE STANDBY DATABASE;
+
+Database altered.
+
+SQL> SELECT CONTROLFILE_TYPE FROM V$DATABASE;
+
+CONTROL
+-------
+CURRENT
+
+SQL> @role
+
+NAME      OPEN_MODE            DATABASE_ROLE    CONTROL SWITCHOVER_STATUS
+--------- -------------------- ---------------- ------- --------------------
+BOBUG     MOUNTED              PRIMARY          CURRENT NOT ALLOWED
+
+SQL> show parameter standby_file_management;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+standby_file_management              string      MANUAL
+SQL>
+SQL>
+SQL> alter system set standby_file_management='AUTO';
+
+System altered.
+
+SQL> show parameter standby_file_management;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+standby_file_management              string      AUTO
+
+
+SQL>
+SQL> select distinct checkpoint_change# from v$datafile;
+
+CHECKPOINT_CHANGE#
+------------------
+        2.3797E+12
+
+SQL> select distinct checkpoint_change# from v$datafile_header;
+
+CHECKPOINT_CHANGE#
+------------------
+        2.3797E+12
+
+
+SQL> alter database open;
+
+Database altered.
+
+SQL> @role
+
+NAME      OPEN_MODE            DATABASE_ROLE    CONTROL SWITCHOVER_STATUS
+--------- -------------------- ---------------- ------- --------------------
+BOBUG     READ WRITE           PRIMARY          CURRENT NOT ALLOWED
+
+SQL> shut immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL>
+SQL> startup mount;
+ORACLE instance started.
+
+Total System Global Area 1269366784 bytes
+Fixed Size                  2203640 bytes
+Variable Size             603979784 bytes
+Database Buffers          637534208 bytes
+Redo Buffers               25649152 bytes
+Database mounted.
+
+SQL> alter database noarchivelog;
+
+Database altered.
+
+SQL> archive log lsit
+SP2-0718: illegal ARCHIVE LOG option
+SQL> archive log list
+Database log mode              No Archive Mode
+Automatic archival             Disabled
+Archive destination            /findbUG/BOBUG_RESTORATION
+Oldest online log sequence     1
+Current log sequence           3
+SQL>
+SQL>
+SQL> alter database open;
+
+
+
+
+
+
+
+alter database rename file '
+
+
+
+
+
+
+
+

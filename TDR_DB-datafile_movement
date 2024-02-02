@@ -1,0 +1,114 @@
+****  TDR DATABASE ****
+
+20:32:20 TDRDB1 SQL>@dg
+
+GROUP_NUMBER NAME            STATE         TOTAL_GB    FREE_GB HOT_USED_GB COLD_USED_GB REQUIRED_MIRROR_FREE_GB USABLE_FILE_GB
+------------ --------------- ----------- ---------- ---------- ----------- ------------ ----------------------- --------------
+           1 FRMSNDB_REDO1   CONNECTED           20  16.921875           0     3.078125                       0      16.921875
+           2 FRMSNDB_REDO2   CONNECTED           20 16.6289063           0   3.37109375                       0     16.6289063
+           3 MEHDB_ARCH_01   MOUNTED            100 33.0585938           0   66.9414063                       0     33.0585938
+           4 MEHDB_DATA01    MOUNTED           1750 235.027344           0   1514.97266                       0     235.027344
+           5 OCR_VOTE        MOUNTED             70 14.8867188           0   55.1132813                       0     14.8867188
+           6 SORDB_ARCH_02   MOUNTED            100 70.2460938           0   29.7539063                       0     70.2460938
+           7 SORDB_DATA02    MOUNTED           1500 749.152344           0   750.847656                       0     749.152344
+           8 TDRDB_ARCH_03   CONNECTED          500 298.953125           0   201.046875                       0     298.953125
+           9 TDRDB_DATA03    CONNECTED        19978 597.347656           0   19380.6523                       0     597.347656
+          10 ECM_DATA04      MOUNTED            100 99.8632813           0    .13671875                       0     99.8632813
+          11 ECM_ARCH_04     MOUNTED            100 99.8710938           0    .12890625                       0     99.8710938
+          12 TDRDB_DATA04    CONNECTED        11264    1034.75           0     10229.25                       0        1034.75
+
+12 rows selected.
+
+Elapsed: 00:00:00.13
+20:32:21 TDRDB1 SQL>
+20:38:34 TDRDB1 SQL>select FILE_NAME,FILE_ID,TABLESPACE_NAME,BYTES/1024/1024/1024 from dba_data_files where FILE_ID in ( 5,8,9,10,11,12,13,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,37,38,39,40,41,42,43,44,45,46,150);
+
+FILE_NAME                                                                 FILE_ID TABLESPACE_NAME           BYTES/1024/1024/1024
+---------------------------------------------------------------------- ---------- ------------------------- --------------------
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.260.997844053                             5 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.266.997982931                             8 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.267.997982935                             9 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.268.997982939                            10 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.269.997982945                            11 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.270.997983115                            12 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.271.997983121                            13 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.275.1004815937                           17 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.276.1004815981                           18 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.277.1004815983                           19 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.278.1004815983                           20 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.279.1004815985                           21 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.280.1004815985                           22 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.281.1004815987                           23 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.282.1004815987                           24 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.283.1004815987                           25 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.284.1004815989                           26 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.285.1004815989                           27 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.286.1004815991                           28 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.287.1004817123                           29 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.288.1004817125                           30 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.289.1004817133                           31 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.296.1005313793                           37 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.297.1005314181                           38 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.298.1005314181                           39 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.299.1005314181                           40 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.300.1005314181                           41 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.301.1005314181                           42 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.302.1005314181                           43 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.303.1005314181                           44 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.304.1005314181                           45 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.305.1005314181                           46 TDR_DATA                                    30
++TDRDB_DATA03/TDRDB/DATAFILE/tdr_data.409.1009713739                          150 TDR_DATA                                    30
+
+33 rows selected.
+
+Elapsed: 00:00:00.06
+
+
+
+
+===>> Do datafile movement once flashback  reverts & db should  be in sync.
+
+alter database move datafile   5 to '+TDRDB_DATA04'; 
+alter database move datafile   8 to '+TDRDB_DATA04';
+alter database move datafile   9 to '+TDRDB_DATA04';
+alter database move datafile  10 to '+TDRDB_DATA04';
+alter database move datafile  11 to '+TDRDB_DATA04';
+alter database move datafile  12 to '+TDRDB_DATA04';
+alter database move datafile  13 to '+TDRDB_DATA04';
+alter database move datafile  17 to '+TDRDB_DATA04';
+alter database move datafile  18 to '+TDRDB_DATA04';
+alter database move datafile  19 to '+TDRDB_DATA04';
+alter database move datafile  20 to '+TDRDB_DATA04';
+alter database move datafile  21 to '+TDRDB_DATA04';
+alter database move datafile  22 to '+TDRDB_DATA04';
+alter database move datafile  23 to '+TDRDB_DATA04';
+alter database move datafile  24 to '+TDRDB_DATA04';
+alter database move datafile  25 to '+TDRDB_DATA04';
+alter database move datafile  26 to '+TDRDB_DATA04';
+alter database move datafile  27 to '+TDRDB_DATA04';
+alter database move datafile  28 to '+TDRDB_DATA04';
+alter database move datafile  29 to '+TDRDB_DATA04';
+alter database move datafile  30 to '+TDRDB_DATA04';
+alter database move datafile  31 to '+TDRDB_DATA04';
+alter database move datafile  37 to '+TDRDB_DATA04';
+alter database move datafile  38 to '+TDRDB_DATA04';
+alter database move datafile  39 to '+TDRDB_DATA04';
+alter database move datafile  40 to '+TDRDB_DATA04';
+alter database move datafile  41 to '+TDRDB_DATA04';
+alter database move datafile  42 to '+TDRDB_DATA04';
+alter database move datafile  43 to '+TDRDB_DATA04';
+alter database move datafile  44 to '+TDRDB_DATA04';
+alter database move datafile  45 to '+TDRDB_DATA04';
+alter database move datafile  46 to '+TDRDB_DATA04';
+alter database move datafile 150 to '+TDRDB_DATA04';
+
+
+
+@dg
+
+
+select FILE_NAME,FILE_ID,TABLESPACE_NAME,BYTES/1024/1024/1024 from dba_data_files where FILE_ID in ( 5,8,9,10,11,12,13,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,37,38,39,40,41,42,43,44,45,46,150);
+
+
+===>>> above datafiles should be in TDRDB_DATA04<<<=====
+

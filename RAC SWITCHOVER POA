@@ -1,0 +1,93 @@
+Check first database is in sync
+
+AT PRODUCTION:-
+
+srvctl status database -d PROD
+srvctl stop database -d PROD
+srvctl start database -d PROD -o mount
+srvctl status database -d PROD
+
+----------------------------------------------------------------------------------------------
+
+AT STANDBY:-
+
+cancel recovery
+
+alter database recover managed standby database cancel;
+select distinct process from v$managed_standby;
+
+---------------------------------------------------------------------------------------------
+After backup completes.
+
+AT PRODUCTION:-
+
+srvctl status database -d PROD
+srvctl stop database -d PROD
+srvctl start database -d PROD
+srvctl status database -d PROD
+
+----------------------------------------------------------------------------------------------
+
+AT STANDBY
+
+alter database recover managed standby database disconnect from session;
+select distinct process from v$managed_standby;
+
+-------------------------------------------------------------------------------------------------
+
+check both the nodes are in sync with standby before switchback
+
+Bring node 2 down at production for Switchback.
+
+srvctl status database -d PROD
+srvctl stop instance -i PROD2 -d PROD
+
+check weather node2 is down
+
+srvctl status database -d PROD
+srvctl status database -d PROD
+
+NOTE:-AT STANDBY,IT SHOULD ASK FOR MEDIA RECOVER WAITING FOR THREAD 1...... NOT THREAD 2 
+
+begin with swicthover or switchback
+
+PRIMARY
+========
+
+1) select name,open_mode,database_role,switchover_status from v$database;
+
+sho parameter job;
+sho parameter target;
+sho parameter aq;
+sho parameter arch;
+
+2) alter system set job_queue_processes=0;
+3) alter system set aq_tm_processes=0
+4) alter system set archive_lag_target=7200 sid='*';
+5) select max(sequence#) from v$archived_log where thread#=2;
+6) select max(sequence#) from v$archived_log where thread#=1;
+7) Alter database commit to switchover to physical standby with session shutdown;
+8) Startup mount;
+9) select name,open_mode,database_role from v$database;(database_role should be standby)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Standby
+========
+
+1) select name,open_mode,database_role,switchover_status from v$database;
+2) Alter database commit to switchover to primary;
+3) shutdown;
+4) startup;
+7) select max(sequence#) from v$archived_log where thread#=2;
+8) select max(sequence#) from v$archived_log where thread#=1;
+9) alter system set job_queue_processes= ;
+10) alter system set aq_tm_processes= ;
+11) alter system set archive_lag_target=300 sid='*';
+
+
+sho parameter job;
+sho parameter target;
+sho parameter aq;
+sho parameter arc;

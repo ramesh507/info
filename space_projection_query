@@ -1,0 +1,63 @@
+select name,open_mode,database_role from v$database;																
+set lines 1000																
+set pages 1000																
+select dt, sum(val) from																
+(																
+select trunc(crddate) dt ,max(value) val from DBA_MGMT.DBM_PARAM_DTL where PRMCODE=2 and crddate between trunc(sysdate-780) and trunc(sysdate) group by trunc(crddate) 																
+UNION all																
+select trunc(crddate) dt ,max(value) val from DBA_MGMT.DBM_PARAM_DTL where PRMCODE=3 and crddate between trunc(sysdate-780) and trunc(sysdate) group by trunc(crddate) 																
+UNION all																
+select trunc(crddate) dt ,max(value) val from DBA_MGMT.DBM_PARAM_DTL where PRMCODE=4 and crddate between trunc(sysdate-780) and trunc(sysdate) group by trunc(crddate) 																
+) group by dt
+ order by  1;
+exit
+
+
+
+
+select GROUP_NUMBER,DISK_NUMBER,name,path,TOTAL_MB, FREE_MB from v$asm_disk  order by GROUP_NUMBER,name;
+
+
+DBA_MGMT.DBM_PAR
+
+
+select  to_char(creation_time,'DD YYYY Month') "Month",
+bytes/1024/1024/1024 "Growth in GB"
+from sys.v$datafile
+where creation_time>sysdate-56;
+group by to_char(creation_time,'YYYY Month') ;
+
+
+
+select
+to_char(a.first_time,'YYYY-MM-DD') "Date ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'00',(BLOCKS*BLOCK_SIZE/1024/1024/1024),0)),'9999') "00 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'01',(BLOCKS*BLOCK_SIZE/1024/1024/1024),0)),'9999') "01 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'02',(BLOCKS*BLOCK_SIZE/1024/1024/1024),0)),'9999') "02 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'03',(BLOCKS*BLOCK_SIZE/1024/1024/1024),0)),'9999') "03 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'04',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "04 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'05',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "05 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'06',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "06 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'07',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "07 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'08',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "08 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'09',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "09 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'10',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "10 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'11',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "11 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'12',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "12 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'13',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "13 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'14',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "14 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'15',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "15 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'16',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "16 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'17',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "17 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'18',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "18 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'19',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "19 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'20',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "20 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'21',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "21 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'22',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "22 ",
+to_char(sum(decode(substr(to_char(a.first_time,'HH24'),1,3),'23',BLOCKS*BLOCK_SIZE/1024/1024/1024,0)),'9999') "23 ",
+to_char(sum(BLOCKS*BLOCK_SIZE/1024/1024/1024),'9999999.99') "TOTAL"
+from v$archived_log a
+where dest_id=1 and
+trunc(a.first_time) >= trunc(sysdate-19)
+group by to_char(a.first_time,'YYYY-MM-DD')
+order by to_char(a.first_time,'YYYY-MM-DD');

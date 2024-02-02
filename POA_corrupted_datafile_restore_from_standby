@@ -1,0 +1,113 @@
+Datafile Curruption POA:-
+Restore from standby database:-
+==================================
+
+09:43:05 eserve1 SQL>!dbv file='+DATA/ESERVE/DATAFILE/users.277.976466527'
+
+DBVERIFY: Release 12.1.0.2.0 - Production on Tue Dec 3 09:46:39 2019
+
+Copyright (c) 1982, 2014, Oracle and/or its affiliates.  All rights reserved.
+
+DBVERIFY - Verification starting : FILE = +DATA/ESERVE/DATAFILE/users.277.976466527
+Page 1222785 is marked corrupt
+Corrupt block relative dba: 0x0492a881 (file 18, block 1222785)
+Bad header found during dbv:
+Data in bad block:
+ type: 6 format: 2 rdba: 0x00407c81
+ last change scn: 0x0000.23c2222d seq: 0x1 flg: 0x0c
+ spare1: 0x0 spare2: 0x0 spare3: 0x0
+ consistency value in tail: 0x222d0601
+ check value in block header: 0xbb13
+ computed block checksum: 0x0
+
+
+
+DBVERIFY - Verification complete
+
+Total Pages Examined         : 2097152
+Total Pages Processed (Data) : 27804
+Total Pages Failing   (Data) : 0
+Total Pages Processed (Index): 6414
+Total Pages Failing   (Index): 0
+Total Pages Processed (Other): 2062481
+Total Pages Processed (Seg)  : 0
+Total Pages Failing   (Seg)  : 0
+Total Pages Empty            : 452
+Total Pages Marked Corrupt   : 1
+Total Pages Influx           : 0
+Total Pages Encrypted        : 0
+Highest block SCN            : 0 (0.0)
+
+09:47:59 eserve1 SQL>
+
+
+
+select * from V$DATABASE_BLOCK_CORRUPTION;
+SELECT FILE_ID,RELATIVE_FNO,FILE_NAME,TABLESPACE_NAME FROM DBA_DATA_FILES WHERE FILE_ID=18;
+
+select owner, segment_name, segment_type FROM dba_extents WHERE RELATIVE_FNO =18 AND Block_id BETWEEN 1222785 AND 1222785 + blocks - 1;
+
+Select BYTES/1024/1024/1024 from dba_free_space where file_id=18 and 1222785 between block_id and block_id + blocks -1;
+
+
+
+
+
+1. select * from  v$database_block_corruption;
+
+
+     FILE#     BLOCK#     BLOCKS CORRUPTION_CHANGE# CORRUPTIO     CON_ID
+---------- ---------- ---------- ------------------ --------- ----------
+        18    1222785          1                  0 CORRUPT            0
+
+
+set lines 200 pages 1000
+col NAME for a100
+select * from  v$database_block_corruption;
+select file#,name from v$datafile where file#=18;
+select sum(bytes/1024/1024/1024) from dba_data_files where file_id=18;
+
+     FILE# NAME
+---------- ----------------------------------------------------------------------------------------------------
+        18 +DATA/ESERVE/DATAFILE/users.277.976466527
+
+2. From Standby:
+
+Make sure Standby database is in sync with primary database and have valid full backup.
+
+stop recovery and take backup of file corrupted.
+
+$rman target /
+
+RMAN> backup as copy datafile 18 format '/home/oracle/users_18.bkp';
+
+scp /home/oracle/users_18.bkp to oracle@172.16.19.83:/tmp
+
+
+3. Primary database:
+
+sqlplus / as sysdba
+
+alter database datafile 18 offline;
+
+
+rman target /
+
+RMAN> catalog datafilecopy '/tmp/users_18.bkp';
+
+RMAN> restore datafile 18;
+
+RMAN> recover datafile 18;
+
+RMAN> sql 'alter database datafile 18 online';
+
+RMAN> validate check logical datafile 18;  ---> Check if corruption exists here
+
+
+4.
+
+sqlplus / as sysdba
+set lines 200 pages 1000
+col NAME for a100
+select * from  v$database_block_corruption;  --> It should so no rows selected.
+

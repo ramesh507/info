@@ -1,0 +1,76 @@
+
+set pages 0
+set lines 500
+set linesize 200
+select USERNAME,CREATED,ACCOUNT_STATUS,LOCK_DATE from dba_users;
+
+
+select GRANTEE,OWNER,TABLE_NAME,GRANTOR,PRIVILEGE from dba_tab_privs where TABLE_NAME not like 'BIN$%';
+
+
+select GRANTEE,PRIVILEGE from dba_sys_privs;
+
+
+select GRANTEE,GRANTED_ROLE from DBA_ROLE_PRIVS;
+
+
+select ROLE,PRIVILEGE from ROLE_SYS_PRIVS;
+
+
+==============================================================================user metadata===========================================
+set long 99999999
+select dbms_metadata.get_ddl('USER','ORDDATA') from dual;
+
+
+   CREATE USER "ORDDATA" IDENTIFIED BY VALUES 'S:B2A4CF0752E0D67F8EC158EF52F8EBE
+7E4ADB4925469546EEBE03D20EE65;A93EC937FCD1DC2A'
+      DEFAULT TABLESPACE "USERS"
+      TEMPORARY TABLESPACE "TEMP_GROUP"
+      PASSWORD EXPIRE
+      ACCOUNT LOCK
+
+
+
+============================================================CREATE USER=====================================================================================
+
+create user IRAC identified by Bank_1234 default tablespace "USERS" temporary tablespace "TEMP_GROUP" profile APPLICATION_USER_PROFILE;  ---profile application 
+
+create user RAHUL identified by Bkc_1212 default TABLESPACE TOOLS TEMPORARY TABLESPACE TEMP2 PROFILE DEFAULT; ----default profile
+
+=========================================================GRANT CONNECT, RESOURCE==============================================================================
+GRANT CONNECT, RESOURCE TO IRAC;
+
+============================================================GRANT for all table for tat schema ===============================================================
+select 'grant select on '||owner||'.'||table_name||' to IRAC;' from dba_tables where owner='PROD_ODS_CBSIND';
+
+========================================================USER PROFILE SET=====================================================================================
+alter user IRAC profile APPLICATION_USER_PROFILE;
+
+=================================================USER PROFILE DETAILS======================================================================================
+
+select USERNAME,ACCOUNT_STATUS,DEFAULT_TABLESPACE,TEMPORARY_TABLESPACE,PROFILE,CREATED from dba_users where USERNAME='IRAC';
+
+==============================================================================================================================================================
+18:24:19 BOBIND1 SQL>set long 999999999
+18:24:24 BOBIND1 SQL>select dbms_metadata.get_ddl('PROFILE','APPLICATION_USER_PROFILE') from dual;
+
+DBMS_METADATA.GET_DDL('PROFILE','APPLICATION_USER_PROFILE')
+--------------------------------------------------------------------------------
+CREATE PROFILE "APPLICATION_USER_PROFILE" 
+LIMIT
+         COMPOSITE_LIMIT DEFAULT
+         SESSIONS_PER_USER UNLIMITED
+         CPU_PER_SESSION DEFAULT
+         CPU_PER_CALL DEFAULT
+         LOGICAL_READS_PER_SESSION DEFAULT
+         LOGICAL_READS_PER_CALL DEFAULT
+         IDLE_TIME UNLIMITED
+         CONNECT_TIME DEFAULT
+         PRIVATE_SGA DEFAULT
+         FAILED_LOGIN_ATTEMPTS UNLIMITED
+         PASSWORD_LIFE_TIME UNLIMITED
+         PASSWORD_REUSE_TIME UNLIMITED
+         PASSWORD_REUSE_MAX UNLIMITED
+         PASSWORD_VERIFY_FUNCTION NULL
+         PASSWORD_LOCK_TIME UNLIMITED
+         PASSWORD_GRACE_TIME UNLIMITED;

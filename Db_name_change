@@ -1,0 +1,614 @@
+
+
+CCMDBUAT.__data_transfer_cache_size=0
+CCMDBUAT.__db_cache_size=11408506880
+CCMDBUAT.__inmemory_ext_roarea=0
+CCMDBUAT.__inmemory_ext_rwarea=0
+CCMDBUAT.__java_pool_size=67108864
+CCMDBUAT.__large_pool_size=100663296
+CCMDBUAT.__oracle_base='/ccmdb/app'#ORACLE_BASE set from environment
+CCMDBUAT.__pga_aggregate_target=4294967296
+CCMDBUAT.__sga_target=13958643712
+CCMDBUAT.__shared_io_pool_size=536870912
+CCMDBUAT.__shared_pool_size=1811939328
+CCMDBUAT.__streams_pool_size=0
+*._b_tree_bitmap_plans=FALSE
+*._first_spare_parameter=10
+*._gby_hash_aggregation_enabled=FALSE
+*._hash_join_enabled=FALSE
+*._optim_peek_user_binds=FALSE
+*._optimizer_skip_scan_enabled=FALSE
+*._optimizer_sortmerge_join_enabled=FALSE
+*._undo_autotune=FALSE
+*._use_adaptive_log_file_sync='FALSE'
+*.aq_tm_processes=1
+*.archive_lag_target=7200
+*.Compatible='12.2.0'
+*.control_files='/ccmdb/DATABASE/CCMDB/ctl/control_01_CCMDB.ctl','/ccmdb/DATABASE/CCMDB/ctl/control_02_CCMDB.ctl'
+*.cursor_sharing='FORCE'
+*.db_block_size=8192
+*.db_cache_advice='Off'
+*.db_file_multiblock_read_count=8
+*.db_name='CCMDBUAT'
+*.db_unique_name='CCMDBUAT'
+*.diagnostic_dest='/ccmdb/app/12.2.0/dbhome/log/diag'
+*.Event='28401 trace name context forever, level 1'
+*.fal_client='FC_CCMDB'
+*.fal_server='FS_CCMDB'
+*.fast_start_mttr_target=300
+*.java_pool_size=16777216
+*.job_queue_processes=4000
+*.log_archive_dest=''
+*.log_archive_dest_1='LOCATION=/ccmdb/DATABASE/CCMDB/arch'
+*.log_archive_dest_2='SERVICE=FS_CCMDB reopen=60 ARCH NOAFFIRM'
+*.log_archive_dest_state_2='DEFER'
+*.log_archive_format='CCMDBUAT_%T_%R_%S.arc'
+*.max_dump_file_size='20480'
+*.nls_date_format='DD-MM-YYYY'
+*.open_cursors=1500
+*.optimizer_dynamic_sampling=1
+*.optimizer_index_caching=50
+*.optimizer_index_cost_adj=15
+*.optimizer_mode='ALL_ROWS'
+*.optimizer_secure_view_merging=FALSE
+*.pga_aggregate_target=4G
+*.Processes=3000
+*.Recyclebin='Off'
+*.session_cached_cursors=500
+*.sga_max_size=13G
+*.sga_target=13G
+#*.standby_file_management='AUTO'
+*.timed_statistics=TRUE
+*.undo_management='AUTO'
+*.undo_retention=1800
+*.undo_tablespace='UNDO_TBLSPC'
+*.workarea_size_policy='AUTO'
+
+
+[oracle@CCMTD201 dbs]$ nid target=CCMDB dbname=CCMDBUAT logfile=/ccmdb/app/12.2.0/dbhome/dbs/nid_CCMDB.log
+Password:
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$ ls -lrt
+total 154868
+-rw-r--r-- 1 oracle dba     3079 May 15  2015 init.ora
+-rw-r----- 1 oracle dba       24 Feb  8 00:17 lkCCMDB_old
+-rw-rw---- 1 oracle dba     1544 Feb  8 02:05 hc_CCMDB.dat_old
+-rw-r----- 1 oracle dba       24 Feb  8 02:13 lkCCMDB
+-rw-r--r-- 1 oracle dba     2096 Feb  8 04:33 initCCMDB.ora_old
+-rw-r----- 1 oracle dba 26296320 Feb  8 04:54 snapcf_CCMDB.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 04:54 c-3104823427-20180208-00
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDBUAT.ora
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDB.ora
+-rw-r----- 1 oracle dba       24 Feb  8 05:26 lkGMCDB
+-rw-r----- 1 oracle dba 26427392 Feb  8 05:56 snapcf_GMCDB.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 05:56 c-3104823427-20180208-01
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDBUAT.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB.ora
+-rw-r----- 1 oracle dba     5632 Feb  8 08:09 spfileGMCDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:11 hc_GMCDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:11 nid_GMCDB.log
+-rw-r--r-- 1 oracle dba     1937 Feb  8 08:15 initGMCDBUAT_kk.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:16 lkGMCDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:17 hc_GMCDBUAT.dat
+-rw-r----- 1 oracle dba 26427392 Feb  8 08:17 snapcf_GMCDBUAT.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 08:17 c-2707501204-20180208-02
+-rw-r----- 1 oracle dba     5632 Feb  8 08:23 spfileCCMDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:27 hc_CCMDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:28 nid_CCMDB.log
+[oracle@CCMTD201 dbs]$ cp -p initCCMDB.ora initCCMDB_savil.ora
+[oracle@CCMTD201 dbs]$ cat initCCMDB.ora
+CCMDB.__data_transfer_cache_size=0
+CCMDB.__db_cache_size=11408506880
+CCMDB.__inmemory_ext_roarea=0
+CCMDB.__inmemory_ext_rwarea=0
+CCMDB.__java_pool_size=67108864
+CCMDB.__large_pool_size=100663296
+CCMDB.__oracle_base='/ccmdb/app'#ORACLE_BASE set from environment
+CCMDB.__pga_aggregate_target=4294967296
+CCMDB.__sga_target=13958643712
+CCMDB.__shared_io_pool_size=536870912
+CCMDB.__shared_pool_size=1811939328
+CCMDB.__streams_pool_size=0
+*._b_tree_bitmap_plans=FALSE
+*._first_spare_parameter=10
+*._gby_hash_aggregation_enabled=FALSE
+*._hash_join_enabled=FALSE
+*._optim_peek_user_binds=FALSE
+*._optimizer_skip_scan_enabled=FALSE
+*._optimizer_sortmerge_join_enabled=FALSE
+*._undo_autotune=FALSE
+*._use_adaptive_log_file_sync='FALSE'
+*.aq_tm_processes=1
+*.archive_lag_target=7200
+*.Compatible='12.2.0'
+*.control_files='/ccmdb/DATABASE/CCMDB/ctl/control_01_CCMDB.ctl','/ccmdb/DATABASE/CCMDB/ctl/control_02_CCMDB.ctl'
+*.cursor_sharing='FORCE'
+*.db_block_size=8192
+*.db_cache_advice='Off'
+*.db_create_file_dest='/ccmdb/DATABASE/CCMDB/data'
+*.db_file_multiblock_read_count=8
+*.db_name='CCMDB'
+*.db_unique_name='CCMDB'
+*.diagnostic_dest='/ccmdb/app/12.2.0/dbhome/log/diag'
+*.Event='28401 trace name context forever, level 1'
+*.fal_client='FC_CCMDB'
+*.fal_server='FS_CCMDB'
+*.fast_start_mttr_target=300
+*.java_pool_size=16777216
+*.job_queue_processes=4000
+*.log_archive_dest=''
+*.log_archive_dest_1='LOCATION=/ccmdb/DATABASE/CCMDB/arch'
+*.log_archive_dest_2='SERVICE=FS_CCMDB reopen=60 ARCH NOAFFIRM'
+*.log_archive_dest_state_2='DEFER'
+*.log_archive_format='CMMDB_%T_%R_%S.arc'
+*.max_dump_file_size='20480'
+*.nls_date_format='DD-MM-YYYY'
+*.open_cursors=1500
+*.optimizer_dynamic_sampling=1
+*.optimizer_index_caching=50
+*.optimizer_index_cost_adj=15
+*.optimizer_mode='ALL_ROWS'
+*.optimizer_secure_view_merging=FALSE
+*.pga_aggregate_target=4G
+*.Processes=3000
+*.Recyclebin='Off'
+*.session_cached_cursors=500
+*.sga_max_size=13G
+*.sga_target=13G
+#*.standby_file_management='AUTO'
+*.timed_statistics=TRUE
+*.undo_management='AUTO'
+*.undo_retention=1800
+*.undo_tablespace='UNDO_TBLSPC'
+*.workarea_size_policy='AUTO'
+
+[oracle@CCMTD201 dbs]$ vi initCCMDBUAT.ora
+[oracle@CCMTD201 dbs]$ vi initCCMDBUAT_savil.ora
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$ env | grep ORA
+ORACLE_SID=CCMDB
+ORACLE_HOME=/ccmdb/app/12.2.0/dbhome
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$ export ORACLE_SID=CCMDBuat
+[oracle@CCMTD201 dbs]$ export ORACLE_SID=CCMDBUAT
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$ env | grep ORA
+ORACLE_SID=CCMDBUAT
+ORACLE_HOME=/ccmdb/app/12.2.0/dbhome
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$ sqlplus / as sysdba
+\
+SQL*Plus: Release 12.2.0.1.0 Production on Thu Feb 8 08:33:42 2018
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL>
+SP2-0042: unknown command "\" - rest of line ignored.
+SQL>
+SQL> startup mount pfile='initCCMDBUAT_savil.ora';
+ORACLE instance started.
+
+Total System Global Area 1.3959E+10 bytes
+Fixed Size                  8636632 bytes
+Variable Size            1912604456 bytes
+Database Buffers         1.2012E+10 bytes
+Redo Buffers               24915968 bytes
+
+
+
+
+ORA-01103: database name 'CCMDBUAT' in control file is not 'CMMDBUAT'
+
+
+SQL> SQL> SQL> SQL> SQL>
+SQL> !more initCCMDBUAT_savil.ora
+CMMDBUAT.__data_transfer_cache_size=0
+CMMDBUAT.__db_cache_size=11408506880
+CMMDBUAT.__inmemory_ext_roarea=0
+CMMDBUAT.__inmemory_ext_rwarea=0
+CMMDBUAT.__java_pool_size=67108864
+CMMDBUAT.__large_pool_size=100663296
+CMMDBUAT.__oracle_base='/ccmdb/app'#ORACLE_BASE set from environment
+CMMDBUAT.__pga_aggregate_target=4294967296
+CMMDBUAT.__sga_target=13958643712
+CMMDBUAT.__shared_io_pool_size=536870912
+CMMDBUAT.__shared_pool_size=1811939328
+CMMDBUAT.__streams_pool_size=0
+*._b_tree_bitmap_plans=FALSE
+*._first_spare_parameter=10
+*._gby_hash_aggregation_enabled=FALSE
+*._hash_join_enabled=FALSE
+*._optim_peek_user_binds=FALSE
+*._optimizer_skip_scan_enabled=FALSE
+*._optimizer_sortmerge_join_enabled=FALSE
+*._undo_autotune=FALSE
+*._use_adaptive_log_file_sync='FALSE'
+*.aq_tm_processes=1
+*.archive_lag_target=7200
+*.Compatible='12.2.0'
+*.control_files='/ccmdb/DATABASE/CCMDB/ctl/control_01_CCMDB.ctl','/ccmdb/DATABASE/CCMDB/ctl/control_02_CCMDB.ctl'
+*.cursor_sharing='FORCE'
+*.db_block_size=8192
+*.db_cache_advice='Off'
+*.db_file_multiblock_read_count=8
+*.db_name='CMMDBUAT'
+*.db_unique_name='CMMDBUAT'
+*.diagnostic_dest='/ccmdb/app/12.2.0/dbhome/log/diag'
+*.Event='28401 trace name context forever, level 1'
+*.fal_client='FC_CCMDB'
+*.fal_server='FS_CCMDB'
+*.fast_start_mttr_target=300
+*.java_pool_size=16777216
+*.job_queue_processes=4000
+*.log_archive_dest=''
+
+SQL>
+SQL> shut immediate;
+ORA-01507: database not mounted
+
+
+
+ORACLE instance shut down.
+SQL> SQL>
+SQL>
+SQL>
+SQL> exit
+Disconnected from Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$ vi initCCMDBUAT_savil.ora
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$
+[oracle@CCMTD201 dbs]$  sqlplus / as sysdba
+
+SQL*Plus: Release 12.2.0.1.0 Production on Thu Feb 8 08:37:16 2018
+
+Copyright (c) 1982, 2016, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL>  startup mount pfile='initCCMDBUAT_savil.ora';
+ORACLE instance started.
+
+Total System Global Area 1.3959E+10 bytes
+Fixed Size                  8636632 bytes
+Variable Size            1979713320 bytes
+Database Buffers         1.1945E+10 bytes
+Redo Buffers               24915968 bytes
+Database mounted.
+SQL>
+
+SQL> SQL>
+SQL>
+SQL> sho parameter name
+
+NAME                                 TYPE
+------------------------------------ --------------------------------
+VALUE
+------------------------------
+cdb_cluster_name                     string
+CCMDBUAT
+cell_offloadgroup_name               string
+
+db_file_name_convert                 string
+
+db_name                              string
+CCMDBUAT
+db_unique_name                       string
+
+NAME                                 TYPE
+------------------------------------ --------------------------------
+VALUE
+------------------------------
+CCMDBUAT
+global_names                         boolean
+FALSE
+instance_name                        string
+CCMDBUAT
+lock_name_space                      string
+
+log_file_name_convert                string
+
+
+NAME                                 TYPE
+------------------------------------ --------------------------------
+VALUE
+------------------------------
+pdb_file_name_convert                string
+
+processor_group_name                 string
+
+service_names                        string
+CCMDBUAT
+SQL>
+\
+
+
+SQL> SP2-0042: unknown command "\" - rest of line ignored.
+SQL> SQL> SQL>
+SQL> alter database open resetlogs;
+
+
+select name,open_mode,database_role,controlfile_type from v$database;
+select * from v$recover_file;
+select distinct status from v$datafile;
+select distinct status from v$backup;
+select process,SEQUENCE# from v$managed_standby;
+
+
+Database altered.
+
+SQL> SQL> SQL>
+NAME      OPEN_MODE            DATABASE_ROLE    CONTROL
+--------- -------------------- ---------------- -------
+CCMDBUAT  READ WRITE           PRIMARY          CURRENT
+
+SQL>
+no rows selected
+
+SQL>
+STATUS
+-------
+ONLINE
+SYSTEM
+
+SQL>
+STATUS
+------------------
+NOT ACTIVE
+
+SQL>
+PROCESS    SEQUENCE#
+--------- ----------
+ARCH               0
+ARCH               0
+ARCH               0
+ARCH               0
+DGRD               0
+DGRD               0
+DGRD               0
+
+7 rows selected.
+
+SQL> SQL>
+SQL>
+SQL> create spfile from pfile;
+
+File created.
+
+SQL> create spfile from pfile='initCCMDBUAT_savil.ora';
+
+File created.
+
+SQL> !ls -lrt
+total 206320
+-rw-r--r-- 1 oracle dba     3079 May 15  2015 init.ora
+-rw-r----- 1 oracle dba       24 Feb  8 00:17 lkCCMDB_old
+-rw-rw---- 1 oracle dba     1544 Feb  8 02:05 hc_CCMDB.dat_old
+-rw-r----- 1 oracle dba       24 Feb  8 02:13 lkCCMDB
+-rw-r--r-- 1 oracle dba     2096 Feb  8 04:33 initCCMDB.ora_old
+-rw-r----- 1 oracle dba 26296320 Feb  8 04:54 snapcf_CCMDB.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 04:54 c-3104823427-20180208-00
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDBUAT.ora
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDB.ora
+-rw-r----- 1 oracle dba       24 Feb  8 05:26 lkGMCDB
+-rw-r----- 1 oracle dba 26427392 Feb  8 05:56 snapcf_GMCDB.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 05:56 c-3104823427-20180208-01
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDBUAT.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB_savil.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB.ora
+-rw-r----- 1 oracle dba     5632 Feb  8 08:09 spfileGMCDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:11 hc_GMCDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:11 nid_GMCDB.log
+-rw-r--r-- 1 oracle dba     1937 Feb  8 08:15 initGMCDBUAT_kk.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:16 lkGMCDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:17 hc_GMCDBUAT.dat
+-rw-r----- 1 oracle dba 26427392 Feb  8 08:17 snapcf_GMCDBUAT.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 08:17 c-2707501204-20180208-02
+-rw-r----- 1 oracle dba     5632 Feb  8 08:23 spfileCCMDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:27 hc_CCMDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:28 nid_CCMDB.log
+-rw-r----- 1 oracle dba       24 Feb  8 08:34 lkCMMDBUAT
+-rw-r--r-- 1 oracle dba     2090 Feb  8 08:37 initCCMDBUAT_savil.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:37 lkCCMDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:39 hc_CCMDBUAT.dat
+-rw-r----- 1 oracle dba 26296320 Feb  8 08:39 snapcf_CCMDBUAT.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 08:39 c-3251536254-20180208-01
+-rw-r----- 1 oracle dba     5632 Feb  8 08:47 spfileCCMDBUAT.ora
+
+SQL> !ls -lert
+ls: invalid option -- 'e'
+Try 'ls --help' for more information.
+
+SQL> create spfile from pfile='initCCMDBUAT_savil.ora';
+
+File created.
+
+SQL> !ls -lrt
+total 206320
+-rw-r--r-- 1 oracle dba     3079 May 15  2015 init.ora
+-rw-r----- 1 oracle dba       24 Feb  8 00:17 lkCCMDB_old
+-rw-rw---- 1 oracle dba     1544 Feb  8 02:05 hc_CCMDB.dat_old
+-rw-r----- 1 oracle dba       24 Feb  8 02:13 lkCCMDB
+-rw-r--r-- 1 oracle dba     2096 Feb  8 04:33 initCCMDB.ora_old
+-rw-r----- 1 oracle dba 26296320 Feb  8 04:54 snapcf_CCMDB.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 04:54 c-3104823427-20180208-00
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDBUAT.ora
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDB.ora
+-rw-r----- 1 oracle dba       24 Feb  8 05:26 lkGMCDB
+-rw-r----- 1 oracle dba 26427392 Feb  8 05:56 snapcf_GMCDB.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 05:56 c-3104823427-20180208-01
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDBUAT.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB_savil.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB.ora
+-rw-r----- 1 oracle dba     5632 Feb  8 08:09 spfileGMCDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:11 hc_GMCDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:11 nid_GMCDB.log
+-rw-r--r-- 1 oracle dba     1937 Feb  8 08:15 initGMCDBUAT_kk.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:16 lkGMCDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:17 hc_GMCDBUAT.dat
+-rw-r----- 1 oracle dba 26427392 Feb  8 08:17 snapcf_GMCDBUAT.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 08:17 c-2707501204-20180208-02
+-rw-r----- 1 oracle dba     5632 Feb  8 08:23 spfileCCMDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:27 hc_CCMDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:28 nid_CCMDB.log
+-rw-r----- 1 oracle dba       24 Feb  8 08:34 lkCMMDBUAT
+-rw-r--r-- 1 oracle dba     2090 Feb  8 08:37 initCCMDBUAT_savil.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:37 lkCCMDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:39 hc_CCMDBUAT.dat
+-rw-r----- 1 oracle dba 26296320 Feb  8 08:39 snapcf_CCMDBUAT.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 08:39 c-3251536254-20180208-01
+-rw-r----- 1 oracle dba     5632 Feb  8 08:47 spfileCCMDBUAT.ora
+
+SQL> !date
+Thu Feb  8 08:47:48 IST 2018
+
+SQL>
+SQL>
+SQL> !date
+Thu Feb  8 08:47:59 IST 2018
+
+SQL>  create spfile from pfile='initCCMDBUAT_savil.ora';
+
+File created.
+
+SQL> !ls -lrt
+total 206320
+-rw-r--r-- 1 oracle dba     3079 May 15  2015 init.ora
+-rw-r----- 1 oracle dba       24 Feb  8 00:17 lkCCMDB_old
+-rw-rw---- 1 oracle dba     1544 Feb  8 02:05 hc_CCMDB.dat_old
+-rw-r----- 1 oracle dba       24 Feb  8 02:13 lkCCMDB
+-rw-r--r-- 1 oracle dba     2096 Feb  8 04:33 initCCMDB.ora_old
+-rw-r----- 1 oracle dba 26296320 Feb  8 04:54 snapcf_CCMDB.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 04:54 c-3104823427-20180208-00
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDBUAT.ora
+-rw-r--r-- 1 oracle dba     1962 Feb  8 05:17 initGMCDB.ora
+-rw-r----- 1 oracle dba       24 Feb  8 05:26 lkGMCDB
+-rw-r----- 1 oracle dba 26427392 Feb  8 05:56 snapcf_GMCDB.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 05:56 c-3104823427-20180208-01
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDBUAT.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB_savil.ora
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDB.ora
+-rw-r----- 1 oracle dba     5632 Feb  8 08:09 spfileGMCDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:11 hc_GMCDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:11 nid_GMCDB.log
+-rw-r--r-- 1 oracle dba     1937 Feb  8 08:15 initGMCDBUAT_kk.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:16 lkGMCDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:17 hc_GMCDBUAT.dat
+-rw-r----- 1 oracle dba 26427392 Feb  8 08:17 snapcf_GMCDBUAT.f
+-rw-r----- 1 oracle dba 26492928 Feb  8 08:17 c-2707501204-20180208-02
+-rw-r----- 1 oracle dba     5632 Feb  8 08:23 spfileCCMDB.ora
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:27 hc_CCMDB.dat
+-rw-r--r-- 1 oracle dba     2076 Feb  8 08:28 nid_CCMDB.log
+-rw-r----- 1 oracle dba       24 Feb  8 08:34 lkCMMDBUAT
+-rw-r--r-- 1 oracle dba     2090 Feb  8 08:37 initCCMDBUAT_savil.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:37 lkCCMDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:39 hc_CCMDBUAT.dat
+-rw-r----- 1 oracle dba 26296320 Feb  8 08:39 snapcf_CCMDBUAT.f
+-rw-r----- 1 oracle dba 26361856 Feb  8 08:39 c-3251536254-20180208-01
+-rw-r----- 1 oracle dba     5632 Feb  8 08:48 spfileCCMDBUAT.ora
+
+SQL>
+SQL>
+SQL> !mv initCCMDBUAT.ora initCCMDBUAT.ora_bkp
+
+SQL>
+SQL> !ls -lrt *CCMDBUAT*
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDBUAT.ora_bkp
+-rw-r--r-- 1 oracle dba     2090 Feb  8 08:37 initCCMDBUAT_savil.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:37 lkCCMDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:39 hc_CCMDBUAT.dat
+-rw-r----- 1 oracle dba 26296320 Feb  8 08:39 snapcf_CCMDBUAT.f
+-rw-r----- 1 oracle dba     5632 Feb  8 08:48 spfileCCMDBUAT.ora
+
+SQL> create pfile from spfile;
+
+File created.
+
+SQL> !ls -lrt *CCMDBUAT*
+-rw-r--r-- 1 oracle dba     2096 Feb  8 06:31 initCCMDBUAT.ora_bkp
+-rw-r--r-- 1 oracle dba     2090 Feb  8 08:37 initCCMDBUAT_savil.ora
+-rw-r----- 1 oracle dba       24 Feb  8 08:37 lkCCMDBUAT
+-rw-rw---- 1 oracle dba     1544 Feb  8 08:39 hc_CCMDBUAT.dat
+-rw-r----- 1 oracle dba 26296320 Feb  8 08:39 snapcf_CCMDBUAT.f
+-rw-r----- 1 oracle dba     5632 Feb  8 08:48 spfileCCMDBUAT.ora
+-rw-r--r-- 1 oracle dba     2055 Feb  8 08:48 initCCMDBUAT.ora
+
+SQL> shut immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL>
+SQL>
+SQL> startup
+ORACLE instance started.
+
+Total System Global Area 1.3959E+10 bytes
+Fixed Size                  8636632 bytes
+Variable Size            1979713320 bytes
+Database Buffers         1.1945E+10 bytes
+Redo Buffers               24915968 bytes
+
+sho parameter spfile;
+Database mounted.
+Database opened.
+SQL> SQL>
+NAME                                 TYPE
+------------------------------------ --------------------------------
+VALUE
+------------------------------
+spfile                               string
+/ccmdb/app/12.2.0/dbhome/dbs/s
+pfileCCMDBUAT.ora
+SQL>
+
+[oracle@CCMTD201 dbs]$ tail -100f nid_CCMDB.log
+
+DBNEWID: Release 12.2.0.1.0 - Production on Thu Feb 8 08:27:36 2018
+
+Copyright (c) 1982, 2017, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to database CCMDB (DBID=3104823427)
+
+Connected to server version 12.2.0
+
+Control Files in database:
+    /ccmdb/DATABASE/CCMDB/ctl/control_01_CCMDB.ctl
+    /ccmdb/DATABASE/CCMDB/ctl/control_02_CCMDB.ctl
+
+Changing database ID from 3104823427 to 3251536254
+Changing database name from CCMDB to CCMDBUAT
+    Control File /ccmdb/DATABASE/CCMDB/ctl/control_01_CCMDB.ctl - modified
+    Control File /ccmdb/DATABASE/CCMDB/ctl/control_02_CCMDB.ctl - modified
+    Datafile /ccmdb/DATABASE/CCMDB/data/system_1_CCMDB.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/sysaux_1_CCMDB.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/undo_1_CCMDB.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/users_1_CCMDB.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/DATA_CCADM_01.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/IDX_CCADM_01.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/CCMDB/datafile/o1_mf_doxee_da_f7pscdnq_.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/CCMDB/datafile/o1_mf_doxee_id_f7pscd9p_.db - dbid changed, wrote new name
+    Datafile /ccmdb/DATABASE/CCMDB/data/CCMDB/datafile/o1_mf_doxee_lo_f7pscdjb_.db - dbid changed, wrote new name
+    Control File /ccmdb/DATABASE/CCMDB/ctl/control_01_CCMDB.ctl - dbid changed, wrote new name
+    Control File /ccmdb/DATABASE/CCMDB/ctl/control_02_CCMDB.ctl - dbid changed, wrote new name
+    Instance shut down
+
+Database name changed to CCMDBUAT.
+Modify parameter file and generate a new password file before restarting.
+Database ID for database CCMDBUAT changed to 3251536254.
+All previous backups and archived redo logs for this database are unusable.
+Database has been shutdown, open database with RESETLOGS option.
+Succesfully changed database name and ID.
+DBNEWID - Completed succesfully.
+

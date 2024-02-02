@@ -1,0 +1,637 @@
+
+Before executing this command we need to bring up the standby database in nomount mode.
+
+We can execute this duplicate command on standby database.
+
+The command syntax is below as follow
+
+rman target <Production_username/password@TNS_PRODUCTION> auxiliary <Standby_username/password@TNS_PRODUCTION>
+
+Sample command 
+
+rman target sys/Bank_1234@FS_CSISFJ auxiliary sys/Bank_1234@FC_CSISFJ
+
+
+IG1CD001:/csisora19cUS/csisus>rman target sys/Bank_1234@FS_CSISUS auxiliary sys/Bank_1234@FC_CSISUS
+
+Recovery Manager: Release 19.0.0.0.0 - Production on Wed Oct 13 18:44:56 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+connected to target database: CSISUS (DBID=3283856467)
+connected to auxiliary database: CSISUS (not mounted)
+
+RMAN> duplicate target database for standby from active database dorecover nofilenamecheck;
+
+Starting Duplicate Db at 13-OCT-21
+using target database control file instead of recovery catalog
+allocated channel: ORA_AUX_DISK_1
+channel ORA_AUX_DISK_1: SID=993 device type=DISK
+current log archived
+
+contents of Memory Script:
+{
+   backup as copy reuse
+   passwordfile auxiliary format  '/csisora19cUS/oracle19c/app/dbhome/dbs/orapwCSISUS'   ;
+}
+executing Memory Script
+
+Starting backup at 13-OCT-21
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=1186 device type=DISK
+Finished backup at 13-OCT-21
+
+contents of Memory Script:
+{
+   restore clone from service  'FS_CSISUS' standby controlfile;
+}
+executing Memory Script
+
+Starting restore at 13-OCT-21
+using channel ORA_AUX_DISK_1
+
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: restoring control file
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+output file name=/csisdataUS/CSISUS/ctl/csisus_control01.ctl
+output file name=/csisdataUS/CSISUS/ctl/csisus_control02.ctl
+Finished restore at 13-OCT-21
+
+contents of Memory Script:
+{
+   sql clone 'alter database mount standby database';
+}
+executing Memory Script
+
+sql statement: alter database mount standby database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CSISUS/system01.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/APDM_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CSISUS/sysaux01.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CSISUS/undotbs01.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/FDM_TBLSPC_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CSISUS/users01.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CONFIG_EDITOR_MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/FDMSRVC_EDITOR_MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/SESSION_TBLSPC_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/FCSE_DEFAULT_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_CONFIG_EDITOR_MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/ACCT_DETAILS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CENTRAL_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CONTROL_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CUST_DETAILS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/TRANS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/REF_MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/SIS_TRANS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/TRANS_HIS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_ACCT_DETAILS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_CUST_DETAILS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_CENTRAL_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_CONTROL_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_TRANS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_REF_MASTER_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_SIS_TRANS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/IDX_TRANS_HIS_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/CSIS_DEFAULT_1_CSISUS.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (datafile) file name /csisdataUS/CSISUS/data/DBMAINTENANCE.DBF conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (tempfile) file name /csisdataUS/CSISUS/data/CSISUS/temp01.dbf conflicts with a file used by the target database
+RMAN-05158: WARNING: auxiliary (tempfile) file name /csisdataUS/CSISUS/data/TEMP_DBMAINTENANCE.DBF conflicts with a file used by the target database
+
+contents of Memory Script:
+{
+   set newname for tempfile  1 to
+ "/csisdataUS/CSISUS/data/CSISUS/temp01.dbf";
+   set newname for tempfile  2 to
+ "/csisdataUS/CSISUS/data/TEMP_DBMAINTENANCE.DBF";
+   switch clone tempfile all;
+   set newname for datafile  1 to
+ "/csisdataUS/CSISUS/data/CSISUS/system01.dbf";
+   set newname for datafile  2 to
+ "/csisdataUS/CSISUS/data/APDM_1_CSISUS.dbf";
+   set newname for datafile  3 to
+ "/csisdataUS/CSISUS/data/CSISUS/sysaux01.dbf";
+   set newname for datafile  4 to
+ "/csisdataUS/CSISUS/data/CSISUS/undotbs01.dbf";
+   set newname for datafile  5 to
+ "/csisdataUS/CSISUS/data/FDM_TBLSPC_1_CSISUS.dbf";
+   set newname for datafile  7 to
+ "/csisdataUS/CSISUS/data/CSISUS/users01.dbf";
+   set newname for datafile  8 to
+ "/csisdataUS/CSISUS/data/CONFIG_EDITOR_MASTER_1_CSISUS.dbf";
+   set newname for datafile  9 to
+ "/csisdataUS/CSISUS/data/FDMSRVC_EDITOR_MASTER_1_CSISUS.dbf";
+   set newname for datafile  10 to
+ "/csisdataUS/CSISUS/data/SESSION_TBLSPC_1_CSISUS.dbf";
+   set newname for datafile  11 to
+ "/csisdataUS/CSISUS/data/FCSE_DEFAULT_1_CSISUS.dbf";
+   set newname for datafile  12 to
+ "/csisdataUS/CSISUS/data/IDX_CONFIG_EDITOR_MASTER_1_CSISUS.dbf";
+   set newname for datafile  13 to
+ "/csisdataUS/CSISUS/data/ACCT_DETAILS_1_CSISUS.dbf";
+   set newname for datafile  14 to
+ "/csisdataUS/CSISUS/data/CENTRAL_1_CSISUS.dbf";
+   set newname for datafile  15 to
+ "/csisdataUS/CSISUS/data/CONTROL_1_CSISUS.dbf";
+   set newname for datafile  16 to
+ "/csisdataUS/CSISUS/data/CUST_DETAILS_1_CSISUS.dbf";
+   set newname for datafile  17 to
+ "/csisdataUS/CSISUS/data/TRANS_1_CSISUS.dbf";
+   set newname for datafile  18 to
+ "/csisdataUS/CSISUS/data/MASTER_1_CSISUS.dbf";
+   set newname for datafile  19 to
+ "/csisdataUS/CSISUS/data/REF_MASTER_1_CSISUS.dbf";
+   set newname for datafile  20 to
+ "/csisdataUS/CSISUS/data/SIS_TRANS_1_CSISUS.dbf";
+   set newname for datafile  21 to
+ "/csisdataUS/CSISUS/data/TRANS_HIS_1_CSISUS.dbf";
+   set newname for datafile  22 to
+ "/csisdataUS/CSISUS/data/IDX_ACCT_DETAILS_1_CSISUS.dbf";
+   set newname for datafile  23 to
+ "/csisdataUS/CSISUS/data/IDX_CUST_DETAILS_1_CSISUS.dbf";
+   set newname for datafile  24 to
+ "/csisdataUS/CSISUS/data/IDX_CENTRAL_1_CSISUS.dbf";
+   set newname for datafile  25 to
+ "/csisdataUS/CSISUS/data/IDX_CONTROL_1_CSISUS.dbf";
+   set newname for datafile  26 to
+ "/csisdataUS/CSISUS/data/IDX_TRANS_1_CSISUS.dbf";
+   set newname for datafile  27 to
+ "/csisdataUS/CSISUS/data/IDX_MASTER_1_CSISUS.dbf";
+   set newname for datafile  28 to
+ "/csisdataUS/CSISUS/data/IDX_REF_MASTER_1_CSISUS.dbf";
+   set newname for datafile  29 to
+ "/csisdataUS/CSISUS/data/IDX_SIS_TRANS_1_CSISUS.dbf";
+   set newname for datafile  30 to
+ "/csisdataUS/CSISUS/data/IDX_TRANS_HIS_1_CSISUS.dbf";
+   set newname for datafile  31 to
+ "/csisdataUS/CSISUS/data/CSIS_DEFAULT_1_CSISUS.dbf";
+   set newname for datafile  32 to
+ "/csisdataUS/CSISUS/data/DBMAINTENANCE.DBF";
+   restore
+   from  nonsparse   from service
+ 'FS_CSISUS'   clone database
+   ;
+   sql 'alter system archive log current';
+}
+executing Memory Script
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+renamed tempfile 1 to /csisdataUS/CSISUS/data/CSISUS/temp01.dbf in control file
+renamed tempfile 2 to /csisdataUS/CSISUS/data/TEMP_DBMAINTENANCE.DBF in control file
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+executing command: SET NEWNAME
+
+Starting restore at 13-OCT-21
+using channel ORA_AUX_DISK_1
+
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00001 to /csisdataUS/CSISUS/data/CSISUS/system01.dbf
+
+  channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:03:06
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00002 to /csisdataUS/CSISUS/data/APDM_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00003 to /csisdataUS/CSISUS/data/CSISUS/sysaux01.dbf
+
+ channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:03:16
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00004 to /csisdataUS/CSISUS/data/CSISUS/undotbs01.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:03
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00005 to /csisdataUS/CSISUS/data/FDM_TBLSPC_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00007 to /csisdataUS/CSISUS/data/CSISUS/users01.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00008 to /csisdataUS/CSISUS/data/CONFIG_EDITOR_MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00009 to /csisdataUS/CSISUS/data/FDMSRVC_EDITOR_MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00010 to /csisdataUS/CSISUS/data/SESSION_TBLSPC_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00011 to /csisdataUS/CSISUS/data/FCSE_DEFAULT_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00012 to /csisdataUS/CSISUS/data/IDX_CONFIG_EDITOR_MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00013 to /csisdataUS/CSISUS/data/ACCT_DETAILS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:03
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00014 to /csisdataUS/CSISUS/data/CENTRAL_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00015 to /csisdataUS/CSISUS/data/CONTROL_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00016 to /csisdataUS/CSISUS/data/CUST_DETAILS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00017 to /csisdataUS/CSISUS/data/TRANS_1_CSISUS.dbf
+
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:04
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00018 to /csisdataUS/CSISUS/data/MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00019 to /csisdataUS/CSISUS/data/REF_MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00020 to /csisdataUS/CSISUS/data/SIS_TRANS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00021 to /csisdataUS/CSISUS/data/TRANS_HIS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:35
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00022 to /csisdataUS/CSISUS/data/IDX_ACCT_DETAILS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00023 to /csisdataUS/CSISUS/data/IDX_CUST_DETAILS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00024 to /csisdataUS/CSISUS/data/IDX_CENTRAL_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00025 to /csisdataUS/CSISUS/data/IDX_CONTROL_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00026 to /csisdataUS/CSISUS/data/IDX_TRANS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:35
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00027 to /csisdataUS/CSISUS/data/IDX_MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00028 to /csisdataUS/CSISUS/data/IDX_REF_MASTER_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00029 to /csisdataUS/CSISUS/data/IDX_SIS_TRANS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00030 to /csisdataUS/CSISUS/data/IDX_TRANS_HIS_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:25
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00031 to /csisdataUS/CSISUS/data/CSIS_DEFAULT_1_CSISUS.dbf
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+channel ORA_AUX_DISK_1: starting datafile backup set restore
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: specifying datafile(s) to restore from backup set
+channel ORA_AUX_DISK_1: restoring datafile 00032 to /csisdataUS/CSISUS/data/DBMAINTENANCE.DBF
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:08
+Finished restore at 13-OCT-21
+
+sql statement: alter system archive log current
+current log archived
+
+contents of Memory Script:
+{
+   restore clone force from service  'FS_CSISUS'
+           archivelog from scn  2520305095810;
+   switch clone datafile all;
+}
+executing Memory Script
+
+Starting restore at 13-OCT-21
+using channel ORA_AUX_DISK_1
+
+channel ORA_AUX_DISK_1: starting archived log restore to default destination
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: restoring archived log
+archived log thread=1 sequence=509
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:02
+channel ORA_AUX_DISK_1: starting archived log restore to default destination
+channel ORA_AUX_DISK_1: using network backup set from service FS_CSISUS
+channel ORA_AUX_DISK_1: restoring archived log
+archived log thread=1 sequence=510
+channel ORA_AUX_DISK_1: restore complete, elapsed time: 00:00:01
+Finished restore at 13-OCT-21
+
+datafile 1 switched to datafile copy
+input datafile copy RECID=1 STAMP=1085856916 file name=/csisdataUS/CSISUS/data/CSISUS/system01.dbf
+datafile 2 switched to datafile copy
+input datafile copy RECID=2 STAMP=1085856916 file name=/csisdataUS/CSISUS/data/APDM_1_CSISUS.dbf
+datafile 3 switched to datafile copy
+input datafile copy RECID=3 STAMP=1085856916 file name=/csisdataUS/CSISUS/data/CSISUS/sysaux01.dbf
+datafile 4 switched to datafile copy
+input datafile copy RECID=4 STAMP=1085856916 file name=/csisdataUS/CSISUS/data/CSISUS/undotbs01.dbf
+datafile 5 switched to datafile copy
+input datafile copy RECID=5 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/FDM_TBLSPC_1_CSISUS.dbf
+datafile 7 switched to datafile copy
+input datafile copy RECID=6 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/CSISUS/users01.dbf
+datafile 8 switched to datafile copy
+input datafile copy RECID=7 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/CONFIG_EDITOR_MASTER_1_CSISUS.dbf
+datafile 9 switched to datafile copy
+input datafile copy RECID=8 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/FDMSRVC_EDITOR_MASTER_1_CSISUS.dbf
+datafile 10 switched to datafile copy
+input datafile copy RECID=9 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/SESSION_TBLSPC_1_CSISUS.dbf
+datafile 11 switched to datafile copy
+input datafile copy RECID=10 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/FCSE_DEFAULT_1_CSISUS.dbf
+datafile 12 switched to datafile copy
+input datafile copy RECID=11 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_CONFIG_EDITOR_MASTER_1_CSISUS.dbf
+datafile 13 switched to datafile copy
+input datafile copy RECID=12 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/ACCT_DETAILS_1_CSISUS.dbf
+datafile 14 switched to datafile copy
+input datafile copy RECID=13 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/CENTRAL_1_CSISUS.dbf
+datafile 15 switched to datafile copy
+input datafile copy RECID=14 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/CONTROL_1_CSISUS.dbf
+datafile 16 switched to datafile copy
+input datafile copy RECID=15 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/CUST_DETAILS_1_CSISUS.dbf
+datafile 17 switched to datafile copy
+input datafile copy RECID=16 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/TRANS_1_CSISUS.dbf
+datafile 18 switched to datafile copy
+input datafile copy RECID=17 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/MASTER_1_CSISUS.dbf
+datafile 19 switched to datafile copy
+input datafile copy RECID=18 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/REF_MASTER_1_CSISUS.dbf
+datafile 20 switched to datafile copy
+input datafile copy RECID=19 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/SIS_TRANS_1_CSISUS.dbf
+datafile 21 switched to datafile copy
+input datafile copy RECID=20 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/TRANS_HIS_1_CSISUS.dbf
+datafile 22 switched to datafile copy
+input datafile copy RECID=21 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_ACCT_DETAILS_1_CSISUS.dbf
+datafile 23 switched to datafile copy
+input datafile copy RECID=22 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_CUST_DETAILS_1_CSISUS.dbf
+datafile 24 switched to datafile copy
+input datafile copy RECID=23 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_CENTRAL_1_CSISUS.dbf
+datafile 25 switched to datafile copy
+input datafile copy RECID=24 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_CONTROL_1_CSISUS.dbf
+datafile 26 switched to datafile copy
+input datafile copy RECID=25 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_TRANS_1_CSISUS.dbf
+datafile 27 switched to datafile copy
+input datafile copy RECID=26 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_MASTER_1_CSISUS.dbf
+datafile 28 switched to datafile copy
+input datafile copy RECID=27 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_REF_MASTER_1_CSISUS.dbf
+datafile 29 switched to datafile copy
+input datafile copy RECID=28 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_SIS_TRANS_1_CSISUS.dbf
+datafile 30 switched to datafile copy
+input datafile copy RECID=29 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/IDX_TRANS_HIS_1_CSISUS.dbf
+datafile 31 switched to datafile copy
+input datafile copy RECID=30 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/CSIS_DEFAULT_1_CSISUS.dbf
+datafile 32 switched to datafile copy
+input datafile copy RECID=31 STAMP=1085856917 file name=/csisdataUS/CSISUS/data/DBMAINTENANCE.DBF
+
+contents of Memory Script:
+{
+   set until scn  2520305096664;
+   recover
+   standby
+   clone database
+    delete archivelog
+   ;
+}
+executing Memory Script
+
+executing command: SET until clause
+
+Starting recover at 13-OCT-21
+using channel ORA_AUX_DISK_1
+
+starting media recovery
+
+archived log for thread 1 with sequence 509 is already on disk as file /csisarchUS/CSISUS/archCSISUS_1_509_1057030804.arc
+archived log for thread 1 with sequence 510 is already on disk as file /csisarchUS/CSISUS/archCSISUS_1_510_1057030804.arc
+archived log file name=/csisarchUS/CSISUS/archCSISUS_1_509_1057030804.arc thread=1 sequence=509
+archived log file name=/csisarchUS/CSISUS/archCSISUS_1_510_1057030804.arc thread=1 sequence=510
+media recovery complete, elapsed time: 00:00:01
+Finished recover at 13-OCT-21
+
+contents of Memory Script:
+{
+   delete clone force archivelog all;
+}
+executing Memory Script
+
+released channel: ORA_DISK_1
+released channel: ORA_AUX_DISK_1
+allocated channel: ORA_DISK_1
+channel ORA_DISK_1: SID=1186 device type=DISK
+deleted archived log
+archived log file name=/csisarchUS/CSISUS/archCSISUS_1_509_1057030804.arc RECID=1 STAMP=1085856914
+deleted archived log
+archived log file name=/csisarchUS/CSISUS/archCSISUS_1_510_1057030804.arc RECID=2 STAMP=1085856915
+Deleted 2 objects
+
+Oracle error from auxiliary database: ORA-01275: Operation RENAME is not allowed if standby file management is automatic.
+
+RMAN-05535: warning: All redo log files were not defined properly.
+Oracle error from auxiliary database: ORA-01275: Operation RENAME is not allowed if standby file management is automatic.
+
+RMAN-05535: warning: All redo log files were not defined properly.
+Oracle error from auxiliary database: ORA-01275: Operation RENAME is not allowed if standby file management is automatic.
+
+RMAN-05535: warning: All redo log files were not defined properly.
+Finished Duplicate Db at 13-OCT-21
+
+RMAN>
+RMAN>
+RMAN>
+RMAN>
+
+RMAN>
+
+RMAN>
+
+RMAN>
+
+Recovery Manager complete.
+IG1CD001:/csisora19cUS/csisus>
+IG1CD001:/csisora19cUS/csisus>
+IG1CD001:/csisora19cUS/csisus>
+IG1CD001:/csisora19cUS/csisus>cd
+IG1CD001:/csisora19cUS/csisus>
+IG1CD001:/csisora19cUS/csisus>
+IG1CD001:/csisora19cUS/csisus>s
+ksh: s:  not found.
+IG1CD001:/csisora19cUS/csisus>sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Wed Oct 13 18:56:29 2021
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> @role
+
+NAME      OPEN_MODE            DATABASE_ROLE    CONTROL
+--------- -------------------- ---------------- -------
+CSISUS    MOUNTED              PHYSICAL STANDBY STANDBY
+
+SQL>
+SQL>
+SQL> @ckmrp
+SP2-0310: unable to open file "ckmrp.sql"
+SQL> select sequence#,process,status from v$managed_standby;
+
+ SEQUENCE# PROCESS   STATUS
+---------- --------- ------------
+         0 ARCH      CONNECTED
+         0 DGRD      ALLOCATED
+         0 DGRD      ALLOCATED
+         0 ARCH      CONNECTED
+         0 ARCH      CONNECTED
+         0 ARCH      CONNECTED
+         0 RFS       IDLE
+
+7 rows selected.
+
+SQL> save ckmrp\
+Created file ckmrp.sql
+SQL>
+SQL>
+SQL>
+SQL>
+SQL> @ckmrp
+
+ SEQUENCE# PROCESS   STATUS
+---------- --------- ------------
+         0 ARCH      CONNECTED
+         0 DGRD      ALLOCATED
+         0 DGRD      ALLOCATED
+         0 ARCH      CONNECTED
+         0 ARCH      CONNECTED
+         0 ARCH      CONNECTED
+         0 RFS       IDLE
+
+7 rows selected.
+
+SQL>
+SQL>
+SQL> alter database recover managed standby database disconnect from session;
+save d
+Database altered.
+
+SQL>

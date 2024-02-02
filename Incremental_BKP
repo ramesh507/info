@@ -1,0 +1,178 @@
+
+@@@@@@@@@@@@@@  trobleshooting check the doc id (Rman-06571 after flashback at standby site (Doc ID 1336872.1))@@@@@
+
+
+SQL> recover managed standby database cancel;
+Media recovery complete.
+SQL>
+SQL>
+SQL> recover standby database;
+ORA-00279: change 1332760934018 generated at 08/11/2018 10:15:59 needed for thread 1
+ORA-00289: suggestion : J:\DATABASE\ARCH\ARCH_1_256210_896461344.ARC
+ORA-00280: change 1332760934018 for thread 1 is in sequence #256210
+
+
+Specify log: {<RET>=suggested | filename | AUTO | CANCEL}
+cancel
+Media recovery cancelled.
+SQL>
+########################prod#########
+
+curerent SCN: 957667205
+ in current scn take the backup off less than 100 
+957667105
+
+
+using SCN take backup in PROD server
+
+connect target /
+run
+{
+allocate channel c1 device type disk;
+allocate channel c2 device type disk;
+allocate channel c3 device type disk;
+allocate channel c4 device type disk;
+allocate channel c5 device type disk;
+BACKUP INCREMENTAL FROM SCN 957667105 as compressed backupset DATABASE FORMAT '/data/incr_19032022/crisil_%U' tag 'FORSTANDBY';
+backup current controlfile for standby format '/data/incr_19032022/UBS_control_%U' tag 'FORSTANDBY';
+release channel c1;
+release channel c2;
+release channel c3;
+release channel c4;
+release channel c5;
+}
+
+rman checksyntax@rman.txt
+
+nohup rman cmdfile=rman.txt log=incr_bkp_19032022.log &
+
+After complete the backup in production Then Transfer the backup dumps to standby.
+
+###############standby##########
+
+********
+stop recovery 
+shut immediate;
+startup mount;
+
+alter database backup controlfile to trace as '/data/incr_19032022/initchitti_bkp_19032022.trc';
+
+alter database backup controlfile to '/data/incr_19032022/ctlchitti_bkp_19032022_new.ctl';
+
+alter database backup controlfile to trace as '/data/incr_19032022/ctlchitti_bkp_19032022_new.trc';
+ 
+shut immediate;
+startup nomount;
+rman target /
+
+restore standby controlfile from '/backup/incr_03032022/UBS_control_940ngc19_1_1';
+
+alter database mount;
+catalog start with '/backup/incr_03032022';
+catalog start with '+DGDATA01/upiarch/datafile';    
+switch database to copy; -- if it fails at this point go for part B plan 
+crosscheck backup of database;
+delete expired backup of database;
+recover database noredo;
+recover managed standby database disconnect from session;
+
+
+ 
+ 
+ 
+ 
+
+
+PART - B :
+-----------
+
+Need to do the catalog for the  datafiles command with the help of diskgroups path or file name path ,where all the datafiles reside .
+
+1) If the datafiles are all in the same directory path, you can catalog them all with one command:
+
+RMAN> catalog start with 'full pathname'; 
+
+Otherwise, to catalog an individual datafile:
+------------------------------------------------
+
+RMAN>   catalog start with 'full file pathname'; 
+
+RMAN>   catalog datafilecopy '+DG_DATA1/BOBSTB/DATAFILE/users.577.1097149415';
+
+
+
+3) Rename the datafiles to the correct copy on disk:
+-----------------------------------------------------
+RMAN> switch database to copy;
+
+RMAN> switch database to copy;
+
+using target database control file instead of recovery catalog
+RMAN-00571: ===========================================================
+RMAN-00569: =============== ERROR MESSAGE STACK FOLLOWS ===============
+RMAN-00571: ===========================================================
+RMAN-03002: failure of switch to copy command at 12/13/2021 18:11:35
+RMAN-06571: datafile 1 does not have recoverable copy
+
+
+4)If the above step still getting fail ,then go with below steps 
+-----------------------------------------------------------------
+
+Note : (CHECK THE INCARNATION ON BOTH PRTMARY AND STANDBY ,Need to set the status to current as per the primary database )
+
+RMAN> list incarnation;
+
+using target database control file instead of recovery catalog
+
+List of Database Incarnations
+DB Key  Inc Key DB Name  DB ID            STATUS  Reset SCN  Reset Time
+------- ------- -------- ---------------- --- ---------- ----------
+1       1       BOBTFDB  3693895752       PARENT  1          26-JAN-17
+2       2       BOBTFDB  3693895752       PARENT  1408558    24-JAN-18
+3       3       BOBTFDB  3693895752       ORPHAN  4263323708 27-JUN-18
+4       4       BOBTFDB  3693895752       ORPHAN  4765260655 11-JUL-18
+5       5       BOBTFDB  3693895752       ORPHAN  4780520642 12-JUL-18
+6       6       BOBTFDB  3693895752       ORPHAN  9495979460 14-FEB-19
+7       7       BOBTFDB  3693895752       CURRENT 2519379227518 11-DEC-21
+
+RMAN> reset database to incarnation 2;
+
+database reset to incarnation 2
+
+RMAN> list incarnation;
+
+
+List of Database Incarnations
+DB Key  Inc Key DB Name  DB ID            STATUS  Reset SCN  Reset Time
+------- ------- -------- ---------------- --- ---------- ----------
+1       1       BOBTFDB  3693895752       PARENT  1          26-JAN-17
+2       2       BOBTFDB  3693895752       CURRENT 1408558    24-JAN-18
+3       3       BOBTFDB  3693895752       ORPHAN  4263323708 27-JUN-18
+4       4       BOBTFDB  3693895752       ORPHAN  4765260655 11-JUL-18
+5       5       BOBTFDB  3693895752       ORPHAN  4780520642 12-JUL-18
+6       6       BOBTFDB  3693895752       ORPHAN  9495979460 14-FEB-19
+7       7       BOBTFDB  3693895752       ORPHAN  2519379227518 11-DEC-21
+
+RMAN>
+
+RMAN> switch database to copy;
+
+datafile 1 switched to datafile copy "+NTRNFDB_DATA1/DRTF/DATAFILE/system.263.973951929"
+datafile 2 switched to datafile copy "+NTRNFDB_DATA1/DRTF/DATAFILE/tiglobal.267.973953279"
+datafile 3 switched to datafile copy "+NTRNFDB_DATA1/DRTF/DATAFILE/sysaux.268.973949909"
+datafile 4 switched to datafile copy "+NTRNFDB_DATA1/DRTF/DATAFILE/undotbs1.258.973945213"
+datafile 5 switched to datafile copy "+NTRNFDB_DATA1/DRTF/DATAFILE/undotbs2.265.973942887"
+
+
+5)RMAN > crosscheck backup of database;
+6)RMAN > delete expired backup of database;
+7)RMAN > recover database noredo;
+8)SQL>recover managed standby database disconnect from session; 
+
+
+Select 'alter database rename file ' ||'''' || member|| '''' || ' to ' || '''+RECO_RPT''' || ';'  from v$logfile;
+
+
+Select 'ALTER database clear  logfile group '||group# || ' ;' from v$standby_log ;
+
+Select 'ALTER database clear logfile group '||group# || ' ;' from v$log;

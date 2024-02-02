@@ -1,0 +1,453 @@
+                           ONLY FOR TABLE RENAME
+                           =====================
+   BOBMBKPRD.BILLHTTPREQ                      
+
+C:\Users\clustersvc>m
+
+C:\Users\clustersvc>set ORACLE_SID=MBDBPROD1
+
+C:\Users\clustersvc>set ORACLE_HOME=e:\app\clustersvc\product\11.2.0\dbhome_1
+
+C:\Users\clustersvc>set PATH=e:\app\clustersvc\product\11.2.0\dbhome_1\bin
+
+C:\Users\clustersvc>sqlplus "/as sysdba"
+
+SQL*Plus: Release 11.2.0.4.0 Production on Sat Sep 28 00:15:08 2019
+
+Copyright (c) 1982, 2017, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters, Automatic Storage Management, OLAP,
+Data Mining and Real Application Testing options
+
+SQL> set lines 199 pages 199
+SQL> select OWNER,TABLE_NAME,TABLESPACE_NAME,DEGREE from dba_tables where table_name in('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+OWNER                          TABLE_NAME                     TABLESPACE_NAME                DEGREE
+------------------------------ ------------------------------ ------------------------------ ----------
+BOBMBKPRD                      BILLHTTPREQ                    USERS                                   1
+
+SQL>
+SQL> col SEGMENT_NAME for a30
+SQL> SELECT OWNER,SEGMENT_NAME,TABLESPACE_NAME,sum(BYTES/1024/1024/1024) from dba_segments where
+  2  SEGMENT_NAME in('BILLHTTPREQ') and owner='BOBMBKPRD'
+  3  group by owner,SEGMENT_NAME,TABLESPACE_NAME;
+
+OWNER                          SEGMENT_NAME                   TABLESPACE_NAME                SUM(BYTES/1024/1024/1024)
+------------------------------ ------------------------------ ------------------------------ -------------------------
+BOBMBKPRD                      BILLHTTPREQ                    USERS                                      1.56152344
+
+SQL>
+SQL> set lines 199 pages 199
+SQL> select OWNER,TABLE_NAME,TABLESPACE_NAME,DEGREE from dba_tables where table_name in('BILLHTPREQ') and owner='BOBMBKPRD';
+
+no rows selected
+
+SQL> select OWNER,TABLE_NAME,CONSTRAINT_NAME,CONSTRAINT_TYPE,STATUS from dba_constraints where owner='BOBMBKPRD' and TABLE_NAME in ('BILLHTTPREQ');
+
+OWNER                          TABLE_NAME                     CONSTRAINT_NAME                C STATUS
+------------------------------ ------------------------------ ------------------------------ - --------
+BOBMBKPRD                      BILLHTTPREQ                    PK_BILLHTTPREQ_1               P ENABLED
+BOBMBKPRD                      BILLHTTPREQ                    SYS_C0064091                   C ENABLED
+
+SQL> SELECT OWNER,INDEX_NAME,INDEX_TYPE,TABLE_OWNER,TABLE_NAME,STATUS,PARTITIONED from dba_indexes where owner='BOBMBKPRD' and table_name in ('BILLHTTPREQ');
+
+OWNER                          INDEX_NAME                     INDEX_TYPE                  TABLE_OWNER                    TABLE_NAME                     STATUS   PAR
+------------------------------ ------------------------------ --------------------------- ------------------------------ ------------------------------ -------- ---
+BOBMBKPRD                      PK_BILLHTTPREQ_1               NORMAL                      BOBMBKPRD              BILLHTTPREQ                    VALID    NO
+
+SQL> select OWNER,TRIGGER_NAME,TRIGGER_TYPE,TABLE_OWNER,TABLE_NAME,STATUS from dba_triggers where owner='BOBMBKPRD' and table_name in ('BILLHTTPREQ');
+
+no rows selected
+
+SQL> select OWNER,GRANTOR,TABLE_NAME,GRANTEE,PRIVILEGE * from DBA_TAB_PRIVS where TABLE_NAME in ('BILLHTTPREQ') and owner='BOBMBKPRD';
+select OWNER,GRANTOR,TABLE_NAME,GRANTEE,PRIVILEGE * from DBA_TAB_PRIVS where TABLE_NAME in ('BILLHTTPREQ') and owner='BOBMBKPRD'
+                                                    *
+ERROR at line 1:
+ORA-00936: missing expression
+
+
+SQL> select OWNER,GRANTOR,TABLE_NAME,GRANTEE, PRIVILEGE from DBA_TAB_PRIVS where TABLE_NAME in ('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+no rows selected
+
+SQL> select 'grant '||p.PRIVILEGE||' on '||p.OWNER||'.'||p.TABLE_NAME||' to '||p.GRANTEE||';' from DBA_TAB_PRIVS p, DBA_TABLES t
+  2  where p.OWNER=t.OWNER and p.TABLE_NAME=t.TABLE_NAME and p.OWNER='BOBMBKPRD'
+  3  and t.TABLE_NAME in ('BILLHTTPREQ');
+
+no rows selected
+
+SQL>
+SQL>
+SQL>
+SQL> select 'grant '||PRIVILEGE||' on '||owner||'.'||table_name||' to '||GRANTEE||';' from  DBA_TAB_PRIVS where OWNER='BOBMBKPRD' and TABLE_NAME in ('BILLHTTPREQ');
+
+no rows selected
+
+SQL> col REFERENCED_NAME for a30
+SQL> select OWNER,NAME,type,REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE from dba_dependencies where OWNER='BOBMBKPRD' and REFERENCED_NAME in
+  2  (select table_name from dba_tables where table_name in ('BILLHTTPREQ')) and REFERENCED_OWNER='BOBMBKPRD';
+
+OWNER                          NAME                           TYPE               REFERENCED_OWNER       REFERENCED_NAME                REFERENCED_TYPE
+------------------------------ ------------------------------ ------------------ ------------------------------ ------------------------------ ------------------
+BOBMBKPRD                      PKG_SERVICES_FOR_BILLS         PACKAGE BODY       BOBMBKPRD              BILLHTTPREQ                    TABLE
+
+SQL>
+SQL>
+SQL> set long 99999
+SQL> set lines 1999 pages 5000
+SQL> select 'select dbms_metadata.get_ddl(''VIEW'','''||REFERENCED_NAME||''','''||REFERENCED_OWNER||''') from dual;' from dba_dependencies
+  2  where OWNER='BOBMBKPRD' and REFERENCED_NAME in (select table_name from dba_tables
+  3  where table_name in ('BILLHTTPREQ')) and REFERENCED_OWNER='BOBMBKPRD';
+
+'SELECTDBMS_METADATA.GET_DDL(''VIEW'','''||REFERENCED_NAME||''','''||REFERENCED_OWNER||''')FROMDUAL;'
+---------------------------------------------------------------------------------------------------------------------------------------------------
+select dbms_metadata.get_ddl('VIEW','BILLHTTPREQ','BOBMBKPRD') from dual;
+
+SQL>
+SQL>
+SQL> select dbms_metadata.get_ddl('VIEW','BILLHTTPREQ','BOBMBKPRD') from dual;
+ERROR:
+ORA-31603: object "BILLHTTPREQ" of type VIEW not found in schema "BOBMBKPRD"
+ORA-06512: at "SYS.DBMS_METADATA", line 5805
+ORA-06512: at "SYS.DBMS_METADATA", line 8344
+ORA-06512: at line 1
+
+
+
+no rows selected
+
+SQL> select dbms_metadata.get_ddl('VIEW','BILLHTTPREQ','BOBMBKPRD') from dual;
+ERROR:
+ORA-31603: object "BILLHTTPREQ" of type VIEW not found in schema "BOBMBKPRD"
+ORA-06512: at "SYS.DBMS_METADATA", line 5805
+ORA-06512: at "SYS.DBMS_METADATA", line 8344
+ORA-06512: at line 1
+
+
+
+no rows selected
+
+SQL> select dbms_metadata.get_ddl('TABLE','BILLHTTPREQ','BOBMBKPRD') from dual;
+
+DBMS_METADATA.GET_DDL('TABLE','BILLHTTPREQ','BOBMBKPRD')
+--------------------------------------------------------------------------------
+
+  CREATE TABLE "BOBMBKPRD"."BILLHTTPREQ"
+   (    "BILLHTTP_REF_NUMBER" VARCHAR2(20) NOT NULL ENABLE,
+        "BILLHTTP_FUNCTION_CODE" VARCHAR2(10),
+        "BILLHTTP_MESSAGE_REQ" VARCHAR2(4000),
+        "BILLHTTP_MESSAGE_RES" VARCHAR2(4000),
+        "PROCESSED_TIME" DATE,
+        "BILLHTTP_REUSE_FUNCTION" VARCHAR2(10),
+         CONSTRAINT "PK_BILLHTTPREQ_1" PRIMARY KEY ("BILLHTTP_REF_NUMBER")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"
+
+
+SQL> select 'select dbms_metadata.get_ddl(''PROCEDURE'','''||REFERENCED_NAME||''','''||REFERENCED_OWNER||''') from dual;' from dba_dependencies
+  2  where OWNER='BOBMBKPRD' and REFERENCED_NAME in (select table_name from dba_tables
+  3  where table_name in ('BILLHTTPREQ')) and REFERENCED_OWNER='BOBMBKPRD';
+
+'SELECTDBMS_METADATA.GET_DDL(''PROCEDURE'','''||REFERENCED_NAME||''','''||REFERENCED_OWNER||''')FROMDUAL;'
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+select dbms_metadata.get_ddl('PROCEDURE','BILLHTTPREQ','BOBMBKPRD') from dual;
+
+SQL>
+SQL>
+SQL> select dbms_metadata.get_ddl('PROCEDURE','BILLHTTPREQ','BOBMBKPRD') from dual;
+ERROR:
+ORA-31603: object "BILLHTTPREQ" of type PROCEDURE not found in schema "BOBMBKPRD"
+ORA-06512: at "SYS.DBMS_METADATA", line 5805
+ORA-06512: at "SYS.DBMS_METADATA", line 8344
+ORA-06512: at line 1
+
+
+
+no rows selected
+
+SQL> select 'grant select/execute on '||owner||'.'||table_name||' to public;' from  DBA_TAB_PRIVS
+  2  where OWNER='BOBMBKPRD' and TABLE_NAME in ('BILLHTTPREQ');
+
+no rows selected
+
+SQL>
+SQL> select 'select dbms_metadata.get_ddl(''SYNONYM'','''||SYNONYM_NAME||''','''||OWNER||''') from dual;' from dba_synonyms
+  2  where TABLE_NAME in ('BILLHTTPREQ') and TABLE_OWNER='BOBMBKPRD';
+
+no rows selected
+
+SQL>
+SQL> SELECT distinct table_name,owner,stattype_locked,last_analyzed FROM dba_tab_statistics where table_name in
+  2  ('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+TABLE_NAME                     OWNER                          STATT LAST_ANAL
+------------------------------ ------------------------------ ----- ---------
+BILLHTTPREQ                    BOBMBKPRD                            22-SEP-19
+
+SQL>
+SQL> exec dbms_stats.create_stat_table(OWNNAME=>'BOBMBKPRD',STATTAB=>'USER_ACTIVITYN_280919');
+
+PL/SQL procedure successfully completed.
+
+SQL> exec dbms_stats.export_table_stats(OWNNAME=>'BOBMBKPRD',TABNAME=>'USER_ACTIVITYN_ORG',STATTAB=>'USER_ACTIVITYN_280919',CASCADE=>true,STATOWN=>'BOBMBKPRD');
+BEGIN dbms_stats.export_table_stats(OWNNAME=>'BOBMBKPRD',TABNAME=>'USER_ACTIVITYN_ORG',STATTAB=>'USER_ACTIVITYN_280919',CASCADE=>true,STATOWN=>'BOBMBKPRD'); END;
+
+*
+ERROR at line 1:
+ORA-20000: TABLE "BOBMBKPRD"."USER_ACTIVITYN_ORG" does not exist or insufficient privileges
+ORA-06512: at "SYS.DBMS_STATS", line 4821
+ORA-06512: at "SYS.DBMS_STATS", line 12798
+ORA-06512: at line 1
+
+
+SQL> exec dbms_stats.export_table_stats(OWNNAME=>'BOBMBKPRD',TABNAME=>'USER_ACTIVITYN_ORG',STATTAB=>'USER_ACTI_280919',CASCADE=>true,STATOWN=>'BOBMBKPRD');
+BEGIN dbms_stats.export_table_stats(OWNNAME=>'BOBMBKPRD',TABNAME=>'USER_ACTIVITYN_ORG',STATTAB=>'USER_ACTI_280919',CASCADE=>true,STATOWN=>'BOBMBKPRD'); END;
+
+*
+ERROR at line 1:
+ORA-20000: TABLE "BOBMBKPRD"."USER_ACTIVITYN_ORG" does not exist or insufficient privileges
+ORA-06512: at "SYS.DBMS_STATS", line 4821
+ORA-06512: at "SYS.DBMS_STATS", line 12798
+ORA-06512: at line 1
+
+
+SQL>
+SQL>
+SQL> set long 999999999
+SQL> select 'select dbms_metadata.get_ddl(''TABLE'','''||TABLE_NAME||''','''||OWNER||''') from dual;' from DBA_TABLES
+  2  WHERE TABLE_NAME in('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+'SELECTDBMS_METADATA.GET_DDL(''TABLE'','''||TABLE_NAME||''','''||OWNER||''')FROMDUAL;'
+------------------------------------------------------------------------------------------------------------------
+select dbms_metadata.get_ddl('TABLE','BILLHTTPREQ','BOBMBKPRD') from dual;
+
+SQL>
+SQL>
+SQL> select dbms_metadata.get_ddl('TABLE','BILLHTTPREQ','BOBMBKPRD') from dual;
+
+DBMS_METADATA.GET_DDL('TABLE','BILLHTTPREQ','BOBMBKPRD')
+--------------------------------------------------------------------------------
+
+  CREATE TABLE "BOBMBKPRD"."BILLHTTPREQ"
+   (    "BILLHTTP_REF_NUMBER" VARCHAR2(20) NOT NULL ENABLE,
+        "BILLHTTP_FUNCTION_CODE" VARCHAR2(10),
+        "BILLHTTP_MESSAGE_REQ" VARCHAR2(4000),
+        "BILLHTTP_MESSAGE_RES" VARCHAR2(4000),
+        "PROCESSED_TIME" DATE,
+        "BILLHTTP_REUSE_FUNCTION" VARCHAR2(10),
+         CONSTRAINT "PK_BILLHTTPREQ_1" PRIMARY KEY ("BILLHTTP_REF_NUMBER")
+  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"  ENABLE
+   ) SEGMENT CREATION IMMEDIATE
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"
+
+
+SQL>
+SQL>
+SQL> set long 999999999
+SQL> select 'select dbms_metadata.get_ddl(''INDEX'','''||INDEX_NAME||''','''||OWNER||''') from dual;' from DBA_INDEXES
+  2  WHERE TABLE_NAME in('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+'SELECTDBMS_METADATA.GET_DDL(''INDEX'','''||INDEX_NAME||''','''||OWNER||''')FROMDUAL;'
+------------------------------------------------------------------------------------------------------------------
+select dbms_metadata.get_ddl('INDEX','PK_BILLHTTPREQ_1','BOBMBKPRD') from dual;
+
+SQL>
+SQL> select dbms_metadata.get_ddl('INDEX','PK_BILLHTTPREQ_1','BOBMBKPRD') from dual;
+
+DBMS_METADATA.GET_DDL('INDEX','PK_BILLHTTPREQ_1','BOBMBKPRD')
+--------------------------------------------------------------------------------
+
+  CREATE UNIQUE INDEX "BOBMBKPRD"."PK_BILLHTTPREQ_1" ON "BOBMBKPRD"."BILLHTTPREQ
+" ("BILLHTTP_REF_NUMBER")
+  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS"
+
+
+SQL>
+SQL>
+SQL> select 'alter table '||owner||'.'||table_name||' rename to '||table_name||'_280919;' from dba_tables
+  2  WHERE TABLE_NAME in('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+'ALTERTABLE'||OWNER||'.'||TABLE_NAME||'RENAMETO'||TABLE_NAME||'_280919;'
+--------------------------------------------------------------------------------------------------------------------------
+alter table BOBMBKPRD.BILLHTTPREQ rename to BILLHTTPREQ_280919;
+
+SQL>
+SQL>
+SQL>
+SQL> select 'alter index '||owner||'.'||index_name||' rename to '||index_name||'_280919;' from dba_indexes
+  2  where TABLE_NAME in('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+'ALTERINDEX'||OWNER||'.'||INDEX_NAME||'RENAMETO'||INDEX_NAME||'_280919;'
+--------------------------------------------------------------------------------------------------------------------------
+alter index BOBMBKPRD.PK_BILLHTTPREQ_1 rename to PK_BILLHTTPREQ_1_280919;
+
+SQL>
+SQL>
+SQL>
+SQL> alter index BOBMBKPRD.PK_BILLHTTPREQ_1 rename to PK_BILLHTTPREQ_1_280919;
+
+Index altered.
+
+SQL> alter table BOBMBKPRD.BILLHTTPREQ rename to BILLHTTPREQ_280919;
+
+Table altered.
+
+SQL>
+SQL>
+SQL> alter table "BOBMBKPRD"."BILLHTTPREQ" rename constraint PK_BILLHTTPREQ_1 to PK_BILLHTTPREQ_1_28092019;
+alter table "BOBMBKPRD"."BILLHTTPREQ" rename constraint PK_BILLHTTPREQ_1 to PK_BILLHTTPREQ_1_28092019
+*
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> alter table "BOBMBKPRD"."BILLHTTPREQ_28092019" rename constraint PK_BILLHTTPREQ_1 to PK_BILLHTTPREQ_1_28092019;
+alter table "BOBMBKPRD"."BILLHTTPREQ_28092019" rename constraint PK_BILLHTTPREQ_1 to PK_BILLHTTPREQ_1_28092019
+*
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> alter table BOBMBKPRD.BILLHTTPREQ_280919 rename to BILLHTTPREQ;
+
+Table altered.
+
+SQL> alter table "BOBMBKPRD"."BILLHTTPREQ" rename constraint PK_BILLHTTPREQ_1 to PK_BILLHTTPREQ_1_28092019;
+
+Table altered.
+
+SQL> alter table "BOBMBKPRD"."BILLHTTPREQ" rename constraint SYS_C0064091 to SYS_C0064091_28092019;
+
+Table altered.
+
+SQL> alter table BOBMBKPRD.BILLHTTPREQ rename to BILLHTTPREQ_280919;
+
+Table altered.
+
+SQL> SELECT distinct table_name,owner,stattype_locked,last_analyzed FROM dba_tab_statistics where table_name in
+  2  ('BILLHTTPREQ') and owner='BOBMBKPRD';
+
+no rows selected
+
+SQL>
+SQL>
+SQL>
+SQL>
+SQL> set lines 199 pages 199
+SQL>
+SQL> col SEGMENT_NAME for a30
+SQL> SELECT OWNER,SEGMENT_NAME,TABLESPACE_NAME,sum(BYTES/1024/1024/1024) from dba_segments where
+  2  SEGMENT_NAME in('BILLHTTPREQ') and owner='BOBMBKPRD'
+  3  group by owner,SEGMENT_NAME,TABLESPACE_NAME;
+
+no rows selected
+
+SQL>
+SQL>
+SQL>
+SQL>
+
+
+===========================================================CROSS CHECK================================================
+Microsoft Windows [Version 6.3.9600]
+(c) 2013 Microsoft Corporation. All rights reserved.
+
+C:\Users\clustersvc>m
+
+C:\Users\clustersvc>set ORACLE_SID=MBDBPROD1
+
+C:\Users\clustersvc>set ORACLE_HOME=e:\app\clustersvc\product\11.2.0\dbhome_1
+
+C:\Users\clustersvc>set PATH=e:\app\clustersvc\product\11.2.0\dbhome_1\bin
+
+C:\Users\clustersvc>sqlplus "/as sysdba"
+
+SQL*Plus: Release 11.2.0.4.0 Production on Sat Sep 28 00:41:14 2019
+
+Copyright (c) 1982, 2017, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.4.0 - 64bit Production
+With the Partitioning, Real Application Clusters, Automatic Storage Management, OLAP,
+Data Mining and Real Application Testing options
+
+SQL> SELECT OWNER,SEGMENT_NAME,TABLESPACE_NAME,sum(BYTES/1024/1024/1024) from dba_segments where
+  2  SEGMENT_NAME in('BILLHTTPREQ_280919') and owner='BOBMBKPRD'
+  3  group by owner,SEGMENT_NAME,TABLESPACE_NAME;
+
+OWNER
+------------------------------
+SEGMENT_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME                SUM(BYTES/1024/1024/1024)
+------------------------------ -------------------------
+BOBMBKPRD
+BILLHTTPREQ_280919
+USERS                                         1.56152344
+
+
+SQL> set lines 199 pages 199
+SQL> col SEGMENT_NAME for a30
+SQL> SELECT OWNER,SEGMENT_NAME,TABLESPACE_NAME,sum(BYTES/1024/1024/1024) from dba_segments where
+  2  SEGMENT_NAME in('BILLHTTPREQ_280919') and owner='BOBMBKPRD'
+  3  group by owner,SEGMENT_NAME,TABLESPACE_NAME;
+
+OWNER                          SEGMENT_NAME                   TABLESPACE_NAME                SUM(BYTES/1024/1024/1024)
+------------------------------ ------------------------------ ------------------------------ -------------------------
+BOBMBKPRD                      BILLHTTPREQ_280919             USERS                                      1.56152344
+
+SQL>
+SQL> SELECT OWNER,INDEX_NAME,INDEX_TYPE,TABLE_OWNER,TABLE_NAME,STATUS,PARTITIONED from dba_indexes
+  2  where owner='BOBMBKPRD' and table_name in ('BILLHTTPREQ_280919');
+
+OWNER                          INDEX_NAME                     INDEX_TYPE                  TABLE_OWNER                    TABLE_NAME                     STATUS   PAR
+------------------------------ ------------------------------ --------------------------- ------------------------------ ------------------------------ -------- ---
+BOBMBKPRD                      PK_BILLHTTPREQ_1_280919        NORMAL                      BOBMBKPRD              BILLHTTPREQ_280919             VALID    NO
+
+SQL>
+SQL>
+SQL> select OWNER,TABLE_NAME,CONSTRAINT_NAME,CONSTRAINT_TYPE,STATUS from dba_constraints
+  2  where owner='BOBMBKPRD' and TABLE_NAME in ('BILLHTTPREQ_280919');
+
+OWNER                          TABLE_NAME                     CONSTRAINT_NAME                C STATUS
+------------------------------ ------------------------------ ------------------------------ - --------
+BOBMBKPRD                      BILLHTTPREQ_280919             PK_BILLHTTPREQ_1_28092019      P ENABLED
+BOBMBKPRD                      BILLHTTPREQ_280919             SYS_C0064091_28092019          C ENABLED
+
+SQL>
+SQL>
+SQL> select OWNER,TRIGGER_NAME,TRIGGER_TYPE,TABLE_OWNER,TABLE_NAME,STATUS from dba_triggers where owner='BOBMBKPRD' and table_name in
+  2  ('BILLHTTPREQ_280919');
+
+no rows selected
+
+SQL>
+SQL>
+SQL>

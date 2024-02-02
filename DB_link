@@ -1,0 +1,139 @@
+
+col DB_LINK for a25
+col OWNER for a20
+col HOST for a25
+set linesize 200
+select * from dba_db_links;
+
+
+DB_link metadata
+==================
+
+set long 99999
+select DBMS_METADATA.GET_DDL('DB_LINK','CMS_ACL','PUBLIC') from dual;
+
+
+select * from dba_db_links where OWNER='PUBLIC' and DB_LINK='CMS_ACL';
+
+select sysdate from dual@CTSTOCSIS57;  /// DB LINK NAME
+
+SQL> desc CUSTOM.C_ERSTWHILE_PYMT_MAP_TBL@CTSTOCSIS57;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BANK_ID                                            VARCHAR2(8 CHAR)
+ SOL_ID                                             VARCHAR2(8 CHAR)
+ BR_CODE                                            VARCHAR2(6 CHAR)
+ BANK_CODE                                          VARCHAR2(6 CHAR)
+ OLD_MICR_CODE                                      VARCHAR2(9 CHAR)
+ NEW_MICR_CODE                                      VARCHAR2(9 CHAR)
+ OLD_BANK_IDENTIFIER                                VARCHAR2(12 CHAR)
+ NEW_BANK_IDENTIFIER                                VARCHAR2(12 CHAR)
+ DESTIN_SOL_ID                                      VARCHAR2(8 CHAR)
+ MIGRATION_STATUS                                   CHAR(1)
+ MIGRATION_DATE                                     DATE
+
+
+
+To drop dblink 
+============================================================
+
+create or replace procedure <source username>.droplink
+is
+begin
+execute immediate 'drop database link <DB LINK NAME>';
+end;
+/ 
+
+execute <source username>.droplink;
+
+example
+=======
+
+PUBLIC
+======
+
+drop public database link CMS_ACL;
+
+PRIVATE
+=======
+
+create or replace procedure BOBCMS.droplink
+is
+begin
+execute immediate 'drop database link CMS_ACL';
+end;
+/
+
+execute BOBCMS.droplink;
+
+drop procedure BOBCMS.droplink;
+
+To create dblink 
+============================================================
+
+create or replace procedure <source username>.createlink 
+is
+begin
+execute immediate 'create <OWNER> database link <DB LINK NAME> connect to <USERNAME> identified by <PASSWD> using ''<DB_NAME>''';
+end;
+/
+
+execute <source username>.createlink;
+
+example
+=======
+
+PUBLIC
+======
+
+CREATE PUBLIC DATABASE LINK CBSSCF CONNECT TO CSCR IDENTIFIED BY RCSC_DBSCH@3004 USING 'SCFDB';
+
+PRIVATE
+=======
+
+create or replace procedure BOBCMS.createlink 
+is
+begin
+execute immediate 'create database link CMS_ACL connect to AXIOMLITEUSR identified by <PASSWORD> using ''SMSAGGDB''';
+end;
+/
+
+execute BOBCMS.createlink;
+
+drop procedure BOBCMS.createlink;
+
+          Testing Private DB Link - Syntax
+
+CHECK DB_LINK CONNECTION
+=========================
+
+create or replace procedure <SOURCE USER NAME>.checklink 
+is
+begin
+for C1 in ( <SQL QUERY TO BE EXECUTED with single column & without ; symbol> )
+LOOP
+dbms_output.put_line(C1.<column name>);
+end loop;
+end;
+/
+
+execute <SOURCE USER NAME>.checklink
+
+drop procedure <SOURCE USER NAME>.checklink ;
+
+*********************************************************	
+
+create or replace procedure TRSGC.checklink
+is
+begin
+for C1 in (select sysdate from dual@CBS_BOBIFSCIBU)
+LOOP
+dbms_output.put_line(C1.sysdate);
+end loop;
+end;
+/
+
+set serverout on size unlimited
+execute TRSGC.checklink
+
+drop procedure TRSGC.checklink

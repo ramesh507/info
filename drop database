@@ -1,0 +1,75 @@
+Dropping  database in UAT
+
+$ ps -ef | grep pmon | grep SG
+  oracle 11236     1  0  Dec 18  ?         0:42 ora_pmon_CSISSG
+  oracle  9904     1  0  Dec 19  ?         0:39 ora_pmon_BOBSG
+
+$ sudo su - oracle
+
+/oracle/oracle->export ORACLE_SID=BOBSG
+/oracle/oracle->sqlplus / as sysdba
+
+SQL> select name,open_mode from v$database;
+
+NAME      OPEN_MODE
+--------- --------------------
+BOBSG     READ WRITE
+
+
+SQL> sho parameter spfile;
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+spfile                               string      /oracleAE/app/ora11g/dbs/spfil
+                                                 eBOBSG.ora
+
+SQL> create pfile from spfile;
+
+File created.
+
+SQL> create pfile ='/oracleAE/app/ora11g/dbs/savil.txt' from spfile;
+
+File created.
+
+SQL> shut immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+
+SQL> exit
+
+/oracle/oracle->s
+
+SQL*Plus: Release 11.2.0.4.0 Production on Thu Dec 22 11:38:13 2016
+
+Copyright (c) 1982, 2013, Oracle.  All rights reserved.
+
+Connected to an idle instance.
+
+SQL> startup restrict mount;
+ORACLE instance started.
+
+Total System Global Area 1269366784 bytes
+Fixed Size                  2203640 bytes
+Variable Size             838860808 bytes
+Database Buffers          402653184 bytes
+Redo Buffers               25649152 bytes
+Database mounted.
+
+SQL>  select logins from v$instance;
+
+LOGINS
+----------
+RESTRICTED
+
+
+SQL> select name,open_mode from v$database;
+
+NAME      OPEN_MODE
+--------- --------------------
+BOBSG     MOUNTED
+
+
+SQL> drop database;
+
+Database dropped.

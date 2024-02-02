@@ -1,0 +1,84 @@
+******* set local listener ************
+--> if the listener status showing unknown -> to revert to ready --> we need to create the local listener.
+
+before
+-------
+LSNRCTL> start LISTENER_PSD2
+Starting /oracle/app/product/12102/dbhome_1/bin/tnslsnr: please wait...
+
+TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+System parameter file is /oracle/app/product/12102/dbhome_1/network/admin/listener.ora
+Log messages written to /oracle/app/diag/tnslsnr/UKPSDDB001/listener_psd2/alert/log.xml
+Listening on: (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=172.16.49.223)(PORT=1647)))
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=172.16.49.223)(PORT=1647)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER_PSD2
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                24-FEB-2021 15:54:54
+Uptime                    0 days 0 hr. 0 min. 0 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /oracle/app/product/12102/dbhome_1/network/admin/listener.ora
+Listener Log File         /oracle/app/diag/tnslsnr/UKPSDDB001/listener_psd2/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=172.16.49.223)(PORT=1647)))
+Services Summary...
+Service "PSD2" has 1 instance(s).
+  Instance "PSD2", status UNKNOWN, has 1 handler(s) for this service...
+The command completed successfully
+
+
+setting local listener
+-----------------------
+
+-> connect to database and execute this command.
+
+alter system set local_listener="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=172.16.49.223)(PORT = 1647))))";
+
+SQL> alter system set local_listener="(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST=172.16.49.223)(PORT = 1647))))";
+
+System altered.
+
+SQL> show parameter local
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------
+local_listener                       string      (DESCRIPTION=(ADDRESS_LIST=(AD
+                                                 DRESS=(PROTOCOL=TCP)(HOST=172.
+                                                 16.49.223)(PORT = 1647))))
+parallel_force_local                 boolean     FALSE
+
+
+
+--> after executing -> check listener status
+
+[oracle@UKPSDDB001 ~]$ lsnrctl status LISTENER_PSD2
+
+LSNRCTL for Linux: Version 12.1.0.2.0 - Production on 24-FEB-2021 16:03:41
+
+Copyright (c) 1991, 2014, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=172.16.49.223)(PORT=1647)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER_PSD2
+Version                   TNSLSNR for Linux: Version 12.1.0.2.0 - Production
+Start Date                24-FEB-2021 15:54:54
+Uptime                    0 days 0 hr. 8 min. 46 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /oracle/app/product/12102/dbhome_1/network/admin/listener.ora
+Listener Log File         /oracle/app/diag/tnslsnr/UKPSDDB001/listener_psd2/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=172.16.49.223)(PORT=1647)))
+Services Summary...
+Service "PSD2" has 2 instance(s).
+  Instance "PSD2", status UNKNOWN, has 1 handler(s) for this service...
+  Instance "PSD2", status READY, has 1 handler(s) for this service...
+Service "PSD2XDB" has 1 instance(s).
+  Instance "PSD2", status READY, has 1 handler(s) for this service...
+The command completed successfully
